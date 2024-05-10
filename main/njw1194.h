@@ -9,7 +9,7 @@
 #include "unistd.h"
 #include "string.h"
 #include "spi.h"
-#include "ampstate.h"
+#include "amp_parameters.h"
 
 //chip address (byte[0], low nibble)
 #define CHIP_ADDRESS        (uint8_t)0x00 //byte[0],  low nibble

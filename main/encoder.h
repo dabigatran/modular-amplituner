@@ -9,7 +9,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"
-#include "ampstate.h"
+#include "amp_parameters.h"
 
 /* MCP1, GPIOB values (8 bits), PIN 2-7 */
 #define ENCODER_DATA (uint8_t) 2

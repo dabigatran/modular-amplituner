@@ -59,14 +59,15 @@ int8_t option_ctrl(uint8_t *snapshot, int8_t (*tuner_state)[VAR_NO], int8_t opti
   int8_t select = VOLUME; 
   if(option==ENC2_TOG)
     select = tuner_state[SELECTED][ACT_VAL];
-  tuner_state[select][LAS_VAL]=tuner_state[select][ACT_VAL]; //save last state of chosen option
+  if(tuner_state[select][ACT_VAL]!=tuner_state[select][MIN_VAL])
+    tuner_state[select][LAS_VAL]=tuner_state[select][ACT_VAL]; //save last state of chosen option
   if(snapshot[PINA_VAL]==FALSE && snapshot[PINB_VAL]==TRUE){
     tuner_state[select][ACT_VAL]++;
     if(LOGI_ENC) ESP_LOGI(TAG, "Option %d. Value: %d.", select, tuner_state[select][ACT_VAL]);
     return check_overflow(tuner_state, select);
   }  
   else if (snapshot[PINA_VAL]==FALSE && snapshot[PINB_VAL]==FALSE) {
-    tuner_state[select][ACT_VAL]--;
+      tuner_state[select][ACT_VAL]--;
     if(LOGI_ENC) ESP_LOGI(TAG, "Option %d. Value: %d.", select, tuner_state[select][ACT_VAL]);
     return check_overflow(tuner_state, select);
   }
@@ -76,22 +77,22 @@ int8_t option_ctrl(uint8_t *snapshot, int8_t (*tuner_state)[VAR_NO], int8_t opti
 
 int8_t check_overflow(int8_t (*tuner_state)[VAR_NO], int8_t select){
   if (tuner_state[select][OVFL_VAL]==OVFL_NO && tuner_state[select][ACT_VAL]>tuner_state[select][MAX_VAL]){
-    tuner_state[select][LAS_VAL]=tuner_state[select][MAX_VAL]+1;
+    tuner_state[select][LAS_VAL]=tuner_state[select][MAX_VAL];
     tuner_state[select][ACT_VAL]=tuner_state[select][MAX_VAL];
     return select;
   }
   else if (tuner_state[select][OVFL_VAL]==OVFL_NO && tuner_state[select][ACT_VAL]<tuner_state[select][MIN_VAL]){
-    tuner_state[select][LAS_VAL]=tuner_state[select][MIN_VAL]-1;
+    tuner_state[select][LAS_VAL]=tuner_state[select][MIN_VAL];
     tuner_state[select][ACT_VAL]=tuner_state[select][MIN_VAL];
     return select;
   }
   else if(tuner_state[select][OVFL_VAL]==OVFL_YES && tuner_state[select][ACT_VAL]>tuner_state[select][MAX_VAL]){
-    tuner_state[select][LAS_VAL]=tuner_state[select][MIN_VAL]-1;
+    tuner_state[select][LAS_VAL]=tuner_state[select][MIN_VAL];
     tuner_state[select][ACT_VAL]=tuner_state[select][MIN_VAL];
     return select;
   }
   else if (tuner_state[select][OVFL_VAL]==OVFL_YES && tuner_state[select][ACT_VAL]<tuner_state[select][MIN_VAL]){
-    tuner_state[select][LAS_VAL]=tuner_state[select][MAX_VAL]+1;
+    tuner_state[select][LAS_VAL]=tuner_state[select][MAX_VAL];
     tuner_state[select][ACT_VAL]=tuner_state[select][MAX_VAL];
     return select;
   }   
@@ -113,6 +114,7 @@ int8_t button_ctrl(int8_t (*tuner_state)[VAR_NO], int8_t option){
 
 int8_t mute(int8_t (*tuner_state)[VAR_NO], int8_t select){
   if(tuner_state[select][ACT_VAL]>tuner_state[select][MIN_VAL]){
+    tuner_state[select][LAS_VAL]=tuner_state[select][ACT_VAL];
     tuner_state[select][ACT_VAL]=tuner_state[select][MIN_VAL]; 
     if(LOGI_ENC) ESP_LOGI(TAG, "Option: %d. Value: %d.", select, tuner_state[select][ACT_VAL]);
     return select;

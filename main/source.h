@@ -7,7 +7,7 @@
 #include "i2c.h"
 #include "mcp23017.h"
 #include "lcd.h"
-#include "ampstate.h"
+#include "amp_parameters.h"
 #include "njw1194.h"
 
 //Number of ports
