@@ -93,12 +93,3 @@ Component inventory:
   r.	inverter module with Schmitt circuit based on 74HC14 integrated circuit (Diodes Incorporated),
   s.	NPN transistors, resistors, capacitors, universal PCBs, wiring, RCA connectors, USB, Bluetooth antennas, heat sink
   t.	housing
- 
-Main loop:
-1.	The start of the main loop is preceded by the start of additional functions that initialize the various components and modules of the receiver and the start of five threads assigned to one of the two cores ("task_setup") of the ESP32. Threads:
-  a.	"getting_loop" - waits for an interrupt coming from the user interface (encoders, button) and places data from the interfacing in the "encoder_queue",
-  b.	"setting_loop" - gets data from the encoder_queue", analyzes it and applies the appropriate hardware settings (source, volume, etc.),
-  c.	"remote_ctrl_loop" - retrieves data from the infrared receiver and puts it in the "remote_queue",
-  d.	"remote_parse_loop" - takes data from the "remote_queue", analyzes it and applies the appropriate hardware settings (source, volume, etc.),
-  e.	"clearing_loop" - due to periodic errors in detecting the occurrence of an interrupt coming from the MCP23017 module, a thread was introduced to                   periodically check the presence of a low state on the interrupt line and read the value from the MCP23017 module.
-2.	For ESP32 infinite main loop can not be empty (all core resources are allocated to this loop which causes the ESP32 watchdog to report errors about the excessive time required by the main thread and the inability to perform other tasks of FreeRTOS) , a decision was made to automatically delete the main loop task. Another possible solution -> vTaskDelay();
