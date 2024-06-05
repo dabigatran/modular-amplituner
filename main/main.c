@@ -71,7 +71,7 @@ static void delete_encoder_tasks(void);
 static void setup_remote_tasks(void);
 static void standby_isr_handler_add(void);
 static void isr_init();
-
+static void amp_power_control(uint8_t state);
 
 void app_main(void){
   initialize();
@@ -305,6 +305,7 @@ static void blink_led(uint8_t state){
 
 static void gpio_init(void){
   gpio_set_direction(LED_GPIO, GPIO_MODE_OUTPUT);
+  gpio_set_direction(AMP_POWER_CONTROL_GPIO, GPIO_MODE_OUTPUT);
   gpio_set_direction(AMP_AUDIO_CONTROL_GPIO, GPIO_MODE_OUTPUT);
   gpio_set_direction(AUDIO_POWER_CONTROL_GPIO, GPIO_MODE_OUTPUT);
   gpio_set_direction(DIGITAL_POWER_CONTROL_GPIO, GPIO_MODE_OUTPUT);
@@ -329,6 +330,11 @@ static void digital_power_toggle(void){
 static void amp_audio_control(uint8_t state){
   gpio_set_level(AMP_AUDIO_CONTROL_GPIO, state);
 }
+
+static void amp_power_control(uint8_t state){
+  gpio_set_level(AMP_POWER_CONTROL_GPIO, state);
+}
+
 
 static void IRAM_ATTR set_change(int8_t last_change){
   char buffer [17];
@@ -391,6 +397,8 @@ static void standby(uint8_t state){
   if(state==ON){
     ESP_LOGI(TAG,"Going into standby mode.");
     amp_audio_control(ON);
+    audio_power_toggle();    
+    amp_power_control(ON);
     lcd_clear();
     lcd_text(0,0,"   going into");
     lcd_text(1,0,"  Standby mode");
@@ -399,8 +407,7 @@ static void standby(uint8_t state){
     encoder_isr_handler_remove();
     spi_bus_remove_njw1194();
     delete_encoder_tasks();    
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    audio_power_toggle();    
+    vTaskDelay(3000 / portTICK_PERIOD_MS);
     digital_power_toggle();    
     ESP_LOGI(TAG,"Stanby mode ON");
     lcd_clear();
@@ -408,6 +415,7 @@ static void standby(uint8_t state){
   else if (state==OFF){
     ESP_LOGI(TAG,"Waking up from Stanby mode");
     amp_audio_control(ON);
+    amp_power_control(OFF);
     digital_power_toggle();
     audio_power_toggle();    
     mcp_init(MCP1_ADDRESS);

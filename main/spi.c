@@ -39,12 +39,12 @@ esp_err_t spi_init2(void){
         .address_bits=0,
         .dummy_bits=0,
         .clock_speed_hz=400000,
-        .duty_cycle_pos=128, 
+        .duty_cycle_pos=128,        
         .mode=2,
         .spics_io_num=GPIO_CS,
-        .cs_ena_pretrans=1,
-        .cs_ena_posttrans=1, 
-        .queue_size=10,
+        .cs_ena_pretrans=1,        
+        .cs_ena_posttrans=1,        
+        .queue_size=10, 
     };
     
    esp_err_t ret= spi_bus_initialize(SENDER_HOST, &bus_config, SPI_DMA_CH_AUTO);

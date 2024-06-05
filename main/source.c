@@ -61,18 +61,20 @@ void set_source(int8_t (*tuner_state)[VAR_NO]){
     */
     while(!sources_available[tuner_state[SOURCE][ACT_VAL]]){
         if(tuner_state[SOURCE][LAS_VAL]<=tuner_state[SOURCE][ACT_VAL]){
+            tuner_state[SOURCE][LAS_VAL]=tuner_state[SOURCE][ACT_VAL];
             tuner_state[SOURCE][ACT_VAL]++;
         }
         else{
+            tuner_state[SOURCE][LAS_VAL]=tuner_state[SOURCE][ACT_VAL];
             tuner_state[SOURCE][ACT_VAL]--;
         }
         if (tuner_state[SOURCE][ACT_VAL]<SOURCE0){
             tuner_state[SOURCE][ACT_VAL]=MAX_SOURCES-1;
-            tuner_state[SOURCE][LAS_VAL]=MAX_SOURCES;
+            tuner_state[SOURCE][LAS_VAL]=MAX_SOURCES-1;
         }
         if (tuner_state[SOURCE][ACT_VAL]>=MAX_SOURCES){
             tuner_state[SOURCE][ACT_VAL]=SOURCE0;
-            tuner_state[SOURCE][LAS_VAL]=SOURCE0-1;
+            tuner_state[SOURCE][LAS_VAL]=SOURCE0; 
         }
     }
     /*Change to available source*/
@@ -105,7 +107,7 @@ int8_t change_source(int8_t source){
             set_analog_input(INPUT_2);
             return source;
    }
-   return source;
+   return source; 
 }
 
 int8_t toggle_hdmi(int8_t source){
