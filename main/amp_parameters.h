@@ -1,51 +1,52 @@
 #ifndef _amp_parameters_H_
 #define _amp_parameters_H_
+#define OPTION_NO (int8_t)7
+#define VAR_NO (int8_t)5
 
-#define LED_GPIO GPIO_NUM_2
-#define STANDBY_BUTTON_GPIO GPIO_NUM_27
-#define AUDIO_POWER_CONTROL_GPIO GPIO_NUM_18
-#define DIGITAL_POWER_CONTROL_GPIO GPIO_NUM_26
-#define AMP_AUDIO_CONTROL_GPIO GPIO_NUM_25
-#define AMP_POWER_CONTROL_GPIO GPIO_NUM_33
-#define VOL_MAX 40
-#define VOL_MIN 0
-#define SRC_MAX 7
-#define SRC_MIN 0
-#define BAL_MAX 20
-#define BAL_MIN -20
-#define TRE_MAX 10
-#define TRE_MIN -10
-#define BAS_MAX 10
-#define BAS_MIN -10
-#define TON_MAX 1
-#define TON_MIN 0
-#define SEL_MIN 2
-#define SEL_MAX 6
-#define OPTION_NO 7
-#define NONE -1
-#define VOLUME 0
-#define SELECTED 1
-#define SOURCE 2
-#define BALANCE 3
-#define TREBLE 4
-#define BASS 5
-#define TONE_SW 6
-#define STANDBY 7
-#define VAR_NO 5
-#define VAR_MIN 0
-#define VAR_MAX 3
-#define ACT_VAL 0
-#define LAS_VAL 1
-#define MIN_VAL 2
-#define MAX_VAL 3
-#define OVFL_VAL 4 
-#define OVFL_NO 0
-#define OVFL_YES 1
-#define PORT_DELAY 2
-#define ENC_QUEUE_LENGTH 40
-#define RMT_QUEUE_LENGTH 20
-#define ON 1
-#define OFF 0
+static const gpio_num_t LED_GPIO = GPIO_NUM_2;
+static const gpio_num_t STANDBY_BUTTON_GPIO = GPIO_NUM_27;
+static const gpio_num_t AUDIO_POWER_CONTROL_GPIO = GPIO_NUM_18;
+static const gpio_num_t DIGITAL_POWER_CONTROL_GPIO = GPIO_NUM_26;
+static const gpio_num_t AMP_AUDIO_CONTROL_GPIO = GPIO_NUM_25;
+static const gpio_num_t AMP_POWER_CONTROL_GPIO = GPIO_NUM_33;
 
+static const int8_t SRC_MAX = 7;
+static const int8_t SRC_MIN = 0;
+static const int8_t BAL_MAX = 20;
+static const int8_t BAL_MIN = -20;
+static const int8_t TRE_MAX = 10;
+static const int8_t TRE_MIN = -10;
+static const int8_t BAS_MAX = 10;
+static const int8_t BAS_MIN = -10;
+static const int8_t TON_MAX = 1;
+static const int8_t TON_MIN = 0;
+static const int8_t SEL_MIN = 2;
+static const int8_t SEL_MAX = 6;
+static const int8_t NONE = -1;
+static const int8_t VOLUME = 0;
+static const int8_t SELECTED = 1;
+static const int8_t SOURCE = 2;
+static const int8_t BALANCE = 3;
+static const int8_t TREBLE = 4;
+static const int8_t BASS = 5;
+static const int8_t TONE_SW = 6;
+static const int8_t STANDBY = 7;
 
+static const int8_t VAR_MIN = 0;
+static const int8_t VAR_MAX = 3;
+static const int8_t ACT_VAL = 0;
+static const int8_t LAS_VAL = 1;
+static const int8_t MIN_VAL = 2;
+static const int8_t MAX_VAL = 3;
+static const int8_t OVFL_VAL = 4;
+static const int8_t OVFL_NO = 0;
+static const int8_t OVFL_YES = 1;
+static const int8_t PORT_DELAY = 2;
+static const int8_t ENC_QUEUE_LENGTH = 40;
+static const int8_t RMT_QUEUE_LENGTH = 20;
+static const int8_t ON = 1;
+static const int8_t OFF = 0;
+static const int8_t MY_CONSTANT = 23;
+static const int8_t VOL_MIN = 0;
+static const int8_t VOL_MAX = 40;
 #endif
