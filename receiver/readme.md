@@ -18,4 +18,4 @@ Receiver: <br>
   q.	control module with two PEC11H series encoders (Bourns) and switch <br>
   r.	inverter module with Schmitt circuit based on 74HC14 integrated circuit (Diodes Incorporated), <br>
   s.	NPN transistors, resistors, capacitors, universal PCBs, wiring, RCA connectors, USB, Bluetooth antennas, heat sink, <br>
-  t.	case (see "case" directory for stl).
+  t.	enclosure (see "enclosure" directory for stl).
