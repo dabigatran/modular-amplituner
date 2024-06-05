@@ -47,15 +47,15 @@
 
 #define LOGE_SRC (uint8_t)0x1
 #define LOGI_SRC (uint8_t)0x0
-void sources_init();
-void map_sources();
-void set_availibility();
-void set_source(int8_t (*tuner_state)[VAR_NO]);
-int8_t change_source(int8_t source);
-int8_t is_hdmi_available();
-int8_t toggle_hdmi(int8_t source);
-int8_t toggle_i2s(int8_t source);
-int8_t hdmi_nib_to_source(int8_t nib_value);
-int8_t i2s_nib_to_source(int8_t nib_value);
-void switch_hdmi();
-void switch_i2s();
+void SourcesInit();
+void MapSources();
+void SetAvailibility();
+void SetSource(int8_t (*tuner_state)[VAR_NO]);
+int8_t ChangeSource(int8_t source);
+int8_t IsHdmiAvailable();
+int8_t ToggleHdmi(int8_t source);
+int8_t ToggleI2S(int8_t source);
+int8_t HdmiNibToSource(int8_t nib_value);
+int8_t I2sNibToSource(int8_t nib_value);
+void SwitchHdmi();
+void SwitchI2s();

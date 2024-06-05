@@ -15,6 +15,6 @@
 #define LOGE_I2C (uint8_t)0x1
 #define LOGI_I2C (uint8_t)0x0
 
-esp_err_t i2c_init(void); // initialize i2c
-esp_err_t i2c_write(uint8_t address, uint8_t size, uint8_t *data);
-esp_err_t i2c_read(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data);
+esp_err_t I2CInit(void); // initialize i2c
+esp_err_t I2CWrite(uint8_t address, uint8_t size, uint8_t *data);
+esp_err_t I2CRead(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data);

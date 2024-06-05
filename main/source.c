@@ -4,13 +4,13 @@ static const char *TAG = "Source";
 static uint8_t sources_map[MAX_SOURCES] = {NOT_FOUND};
 static uint8_t sources_available[MAX_SOURCES] = {NOT_FOUND};
 
-void sources_init()
+void SourcesInit()
 {
-    map_sources();
-    set_availibility();
+    MapSources();
+    SetAvailibility();
 }
 
-void map_sources()
+void MapSources()
 {
     sources_map[SOURCE0] = INPUT_1;
     sources_map[SOURCE1] = (HDMI1 & 0x0f);       // value of HDMI_nib (lo_nib)
@@ -23,12 +23,12 @@ void map_sources()
     sources_map[SOURCE8] = ((I2S4 >> 4) & 0x0f); // value of i2s_nib (hi_nib)
 }
 
-void set_availibility()
+void SetAvailibility()
 {
     sources_available[SOURCE0] = FOUND;
     for (int8_t i = SOURCE1; i <= SOURCE4; i++)
     { // sources 1-4
-        int8_t source = is_hdmi_available();
+        int8_t source = IsHdmiAvailable();
         sources_available[source] = FOUND;
     }
     for (int8_t i = SOURCE6; i <= SOURCE7; i++)
@@ -37,16 +37,16 @@ void set_availibility()
     }
 }
 
-int8_t is_hdmi_available()
+int8_t IsHdmiAvailable()
 {
     uint8_t value = 0;
-    switch_hdmi();
-    mcp_read(MCP1_ADDRESS, GPIOA, &value);
+    SwitchHdmi();
+    McpRead(MCP1_ADDRESS, GPIOA, &value);
     int8_t hdmi_nib = (int8_t)value & 0x0f;
-    return hdmi_nib_to_source(hdmi_nib);
+    return HdmiNibToSource(hdmi_nib);
 }
 
-int8_t hdmi_nib_to_source(int8_t nib_value)
+int8_t HdmiNibToSource(int8_t nib_value)
 {
     for (int8_t i = SOURCE1; i <= SOURCE4; i++)
     {
@@ -56,7 +56,7 @@ int8_t hdmi_nib_to_source(int8_t nib_value)
     return 0;
 }
 
-int8_t i2s_nib_to_source(int8_t nib_value)
+int8_t I2SNibToSource(int8_t nib_value)
 {
     for (int8_t i = SOURCE5; i <= SOURCE8; i++)
     {
@@ -66,7 +66,7 @@ int8_t i2s_nib_to_source(int8_t nib_value)
     return 0;
 }
 
-void set_source(int8_t (*tuner_state)[VAR_NO])
+void SetSource(int8_t (*tuner_state)[VAR_NO])
 {
     /*
         Checking if source is available. If not-> select next  or previous depending
@@ -96,44 +96,44 @@ void set_source(int8_t (*tuner_state)[VAR_NO])
         }
     }
     /*Change to available source*/
-    int8_t change_response = change_source(tuner_state[SOURCE][ACT_VAL]);
+    int8_t change_response = ChangeSource(tuner_state[SOURCE][ACT_VAL]);
     if (change_response != tuner_state[SOURCE][ACT_VAL])
         tuner_state[SOURCE][ACT_VAL] = change_response;
 }
 
-int8_t change_source(int8_t source)
+int8_t ChangeSource(int8_t source)
 {
     if (LOGI_SRC)
         ESP_LOGI(TAG, "Change source: %d", source);
     switch (source)
     {
     case SOURCE0: // analog
-        set_analog_input(INPUT_1);
+        SetAnalogInput(INPUT_1);
         return source;
     case SOURCE1 ... SOURCE4: // hdmi sources
-        int8_t response = toggle_hdmi(source);
+        int8_t response = ToggleHdmi(source);
         if (response == NOT_FOUND)
         {
             // change to i2s source if no hdmi source found
-            toggle_i2s(SOURCE6);
-            set_analog_input(INPUT_2);
+            ToggleI2S(SOURCE6);
+            SetAnalogInput(INPUT_2);
             return SOURCE6;
         }
         else
         {
-            toggle_i2s(SOURCE5);
-            set_analog_input(INPUT_2);
+            ToggleI2S(SOURCE5);
+            SetAnalogInput(INPUT_2);
             return response;
         }
     case SOURCE6 ... SOURCE7: // i2s sources, remark: SOURCE5 and 8 are used for hdmi and radio output
-        toggle_i2s(source);
-        set_analog_input(INPUT_2);
+        ToggleI2S(source);
+        SetAnalogInput(INPUT_2);
         return source;
     }
     return source;
 }
 
-int8_t toggle_hdmi(int8_t source)
+int8_t ToggleHdmi(int8_t source)
 {
     // nib[0]->searched(selected) source, nib[1]->set source (read from hdmi module)
     int8_t nib[2] = {sources_map[source], 0};
@@ -141,22 +141,22 @@ int8_t toggle_hdmi(int8_t source)
     int8_t success = false;
     for (int i = 0; i < HDMI_NO; i++)
     {
-        mcp_read(MCP1_ADDRESS, GPIOA, &value);
+        McpRead(MCP1_ADDRESS, GPIOA, &value);
         nib[SET] = (int8_t)value & 0x0f;
         if (LOGI_SRC)
             ESP_LOGI(TAG, "hdmi toggle->selected: %02x, set: %02x", nib[SEARCHED], nib[SET]);
 
         // new device plugged during operation (was not on available map)
         // add this device to availbility map and set source to the device
-        if (!sources_available[hdmi_nib_to_source(nib[SET])])
+        if (!sources_available[HdmiNibToSource(nib[SET])])
         {
-            sources_available[hdmi_nib_to_source(nib[SET])] = FOUND;
+            sources_available[HdmiNibToSource(nib[SET])] = FOUND;
             success = true;
             break;
         }
         if (nib[SEARCHED] != nib[SET])
         {
-            switch_hdmi();
+            SwitchHdmi();
         }
         else
         {
@@ -165,49 +165,49 @@ int8_t toggle_hdmi(int8_t source)
         }
     }
     if (success)
-        return hdmi_nib_to_source(nib[SET]);
+        return HdmiNibToSource(nib[SET]);
     else
     {
         // not found, although on available map (probably unplugged during operation)
         // remove from availibility map
-        sources_available[hdmi_nib_to_source(nib[SEARCHED])] = NOT_FOUND;
+        sources_available[HdmiNibToSource(nib[SEARCHED])] = NOT_FOUND;
         return NOT_FOUND;
     }
 }
 
-int8_t toggle_i2s(int8_t source)
+int8_t ToggleI2S(int8_t source)
 {
     // nib[0]->searched (selected) source, nib[1]->set source (read from i2s module)
     int8_t nib[2] = {sources_map[source], 0};
     uint8_t value = 0;
     for (int i = 0; i < I2S_NO; i++)
     {
-        mcp_read(MCP1_ADDRESS, GPIOA, &value);
+        McpRead(MCP1_ADDRESS, GPIOA, &value);
         nib[SET] = (int8_t)(value >> 4) & 0x0f;
         if (LOGI_SRC)
             ESP_LOGI(TAG, "i2s toggle->selected: %02x, set: %02x", nib[SEARCHED], nib[SET]);
         if (nib[SEARCHED] != nib[SET])
         {
-            switch_i2s();
+            SwitchI2s();
         }
         else
             break;
     }
-    return i2s_nib_to_source(nib[SET]);
+    return I2SNibToSource(nib[SET]);
 }
 
-void switch_hdmi()
+void SwitchHdmi()
 {
-    mcp_set_pin(MCP1_ADDRESS, GPIOB, HDMI_SWITCH);
+    McpSetPin(MCP1_ADDRESS, GPIOB, HDMI_SWITCH);
     vTaskDelay(100 / (portTICK_PERIOD_MS));
-    mcp_clear_pin(MCP1_ADDRESS, GPIOB, HDMI_SWITCH);
+    McpClearPin(MCP1_ADDRESS, GPIOB, HDMI_SWITCH);
     vTaskDelay(500 / (portTICK_PERIOD_MS));
 }
 
-void switch_i2s()
+void SwitchI2s()
 {
-    mcp_set_pin(MCP1_ADDRESS, GPIOB, I2S_SWITCH);
+    McpSetPin(MCP1_ADDRESS, GPIOB, I2S_SWITCH);
     vTaskDelay(110 / portTICK_PERIOD_MS);
-    mcp_clear_pin(MCP1_ADDRESS, GPIOB, I2S_SWITCH);
+    McpClearPin(MCP1_ADDRESS, GPIOB, I2S_SWITCH);
     vTaskDelay(10 / (portTICK_PERIOD_MS));
 }

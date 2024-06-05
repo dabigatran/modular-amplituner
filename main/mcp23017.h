@@ -55,8 +55,8 @@
 #define LOGE_MCP (uint8_t)0x1
 #define LOGI_MCP (uint8_t)0x0
 
-esp_err_t mcp_init(uint8_t address);
-esp_err_t mcp_write(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data);
-esp_err_t mcp_read(uint8_t address, uint8_t reg, uint8_t *data);
-esp_err_t mcp_set_pin(uint8_t address, uint8_t reg, uint8_t pin);
-esp_err_t mcp_clear_pin(uint8_t address, uint8_t reg, uint8_t pin);
+esp_err_t McpInit(uint8_t address);
+esp_err_t McpWrite(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data);
+esp_err_t McpRead(uint8_t address, uint8_t reg, uint8_t *data);
+esp_err_t McpSetPin(uint8_t address, uint8_t reg, uint8_t pin);
+esp_err_t McpClearPin(uint8_t address, uint8_t reg, uint8_t pin);

@@ -1,13 +1,13 @@
 #include "encoder.h"
 static const char *TAG = "Encoder";
 
-int8_t check_interrupt(int8_t (*tuner_state)[VAR_NO])
+int8_t CheckInterrupt(int8_t (*tuner_state)[VAR_NO])
 {
   uint8_t snapshot[SNAP_SIZE];
   uint8_t last_interrupt;
   uint8_t captured_values;
-  mcp_read(MCP1_ADDRESS, INTFB, &last_interrupt);
-  mcp_read(MCP1_ADDRESS, INTCAPB, &captured_values);
+  McpRead(MCP1_ADDRESS, INTFB, &last_interrupt);
+  McpRead(MCP1_ADDRESS, INTCAPB, &captured_values);
   for (uint8_t i = 0; i < 8; i++)
   {
     if (last_interrupt & (1 << i))
@@ -23,10 +23,10 @@ int8_t check_interrupt(int8_t (*tuner_state)[VAR_NO])
   snapshot[PINB_VAL] = (captured_values >> snapshot[PINB]) & 0x01;
   if (LOGI_ENC)
     ESP_LOGI(TAG, "Snapshot: PINA %d, PINB %d, PINA val %d, PINB val %d.", snapshot[PINA], snapshot[PINB], snapshot[PINA_VAL], snapshot[PINB_VAL]);
-  return decode_pins(snapshot, tuner_state);
+  return DecodePins(snapshot, tuner_state);
 }
 
-int8_t create_snapshot(int8_t (*tuner_state)[VAR_NO], uint8_t *interrupt_data)
+int8_t CreateSnapshot(int8_t (*tuner_state)[VAR_NO], uint8_t *interrupt_data)
 {
   uint8_t snapshot[SNAP_SIZE];
   for (uint8_t i = 0; i < 8; i++)
@@ -44,26 +44,26 @@ int8_t create_snapshot(int8_t (*tuner_state)[VAR_NO], uint8_t *interrupt_data)
   snapshot[PINB_VAL] = (interrupt_data[1] >> snapshot[PINB]) & 0x01;
   if (LOGI_ENC)
     ESP_LOGI(TAG, "Snapshot: PINA %d, PINB %d, PINA val %d, PINB val %d.", snapshot[PINA], snapshot[PINB], snapshot[PINA_VAL], snapshot[PINB_VAL]);
-  return decode_pins(snapshot, tuner_state);
+  return DecodePins(snapshot, tuner_state);
 }
 
-int8_t decode_pins(uint8_t *snapshot, int8_t (*tuner_state)[VAR_NO])
+int8_t DecodePins(uint8_t *snapshot, int8_t (*tuner_state)[VAR_NO])
 {
   if (snapshot[PINA] == ENC1_PINA && snapshot[PINB] == ENC1_PINB)
-    return option_ctrl(snapshot, tuner_state, ENC1_TOG);
+    return OptionControl(snapshot, tuner_state, ENC1_TOG);
   else if (snapshot[PINA] == ENC1_SW_PIN && snapshot[PINA_VAL] == true)
-    return button_ctrl(tuner_state, ENC1_SW);
+    return ButtonControl(tuner_state, ENC1_SW);
   else if (snapshot[PINA] == ENC2_PINA && snapshot[PINB] == ENC2_PINB)
-    return option_ctrl(snapshot, tuner_state, ENC2_TOG);
+    return OptionControl(snapshot, tuner_state, ENC2_TOG);
   else if (snapshot[PINA] == ENC2_SW_PIN && snapshot[PINA_VAL] == true)
-    return button_ctrl(tuner_state, ENC2_SW);
+    return ButtonControl(tuner_state, ENC2_SW);
   else
   {
     return NONE;
   }
 }
 
-int8_t option_ctrl(uint8_t *snapshot, int8_t (*tuner_state)[VAR_NO], int8_t option)
+int8_t OptionControl(uint8_t *snapshot, int8_t (*tuner_state)[VAR_NO], int8_t option)
 {
   int8_t select = VOLUME;
   if (option == ENC2_TOG)
@@ -75,20 +75,20 @@ int8_t option_ctrl(uint8_t *snapshot, int8_t (*tuner_state)[VAR_NO], int8_t opti
     tuner_state[select][ACT_VAL]++;
     if (LOGI_ENC)
       ESP_LOGI(TAG, "Option %d. Value: %d.", select, tuner_state[select][ACT_VAL]);
-    return check_overflow(tuner_state, select);
+    return CheckOverflow(tuner_state, select);
   }
   else if (snapshot[PINA_VAL] == FALSE && snapshot[PINB_VAL] == FALSE)
   {
     tuner_state[select][ACT_VAL]--;
     if (LOGI_ENC)
       ESP_LOGI(TAG, "Option %d. Value: %d.", select, tuner_state[select][ACT_VAL]);
-    return check_overflow(tuner_state, select);
+    return CheckOverflow(tuner_state, select);
   }
   else
     return NONE;
 }
 
-int8_t check_overflow(int8_t (*tuner_state)[VAR_NO], int8_t select)
+int8_t CheckOverflow(int8_t (*tuner_state)[VAR_NO], int8_t select)
 {
   if (tuner_state[select][OVFL_VAL] == OVFL_NO && tuner_state[select][ACT_VAL] > tuner_state[select][MAX_VAL])
   {
@@ -118,21 +118,21 @@ int8_t check_overflow(int8_t (*tuner_state)[VAR_NO], int8_t select)
     return select;
 }
 
-int8_t button_ctrl(int8_t (*tuner_state)[VAR_NO], int8_t option)
+int8_t ButtonControl(int8_t (*tuner_state)[VAR_NO], int8_t option)
 {
   if (option == ENC1_SW)
   {
-    return mute(tuner_state, VOLUME);
+    return Mute(tuner_state, VOLUME);
   }
   else if (option == ENC2_SW)
   {
-    return toggle(tuner_state, SELECTED);
+    return Toggle(tuner_state, SELECTED);
   }
   else
     return NONE;
 }
 
-int8_t mute(int8_t (*tuner_state)[VAR_NO], int8_t select)
+int8_t Mute(int8_t (*tuner_state)[VAR_NO], int8_t select)
 {
   if (tuner_state[select][ACT_VAL] > tuner_state[select][MIN_VAL])
   {
@@ -151,11 +151,11 @@ int8_t mute(int8_t (*tuner_state)[VAR_NO], int8_t select)
   }
 }
 
-int8_t toggle(int8_t (*tuner_state)[VAR_NO], int8_t select)
+int8_t Toggle(int8_t (*tuner_state)[VAR_NO], int8_t select)
 {
   tuner_state[select][LAS_VAL] = tuner_state[select][ACT_VAL];
   tuner_state[select][ACT_VAL]++;
   if (LOGI_ENC)
     ESP_LOGI(TAG, "Option set to %d. Value: %d", select, tuner_state[select][ACT_VAL]);
-  return check_overflow(tuner_state, select);
+  return CheckOverflow(tuner_state, select);
 }

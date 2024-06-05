@@ -5,7 +5,7 @@ static const size_t I2C_TX_BUF_DISABLE = 0;
 static const size_t I2C_RX_BUF_DISABLE = 0;
 static const int INTR_FLAGS = 0;
 
-esp_err_t i2c_init(void)
+esp_err_t I2CInit(void)
 {
    i2c_config_t config = {
        .mode = I2C_MODE_MASTER,
@@ -15,7 +15,6 @@ esp_err_t i2c_init(void)
        .scl_pullup_en = GPIO_PULLUP_ENABLE,
        .master.clk_speed = 400000,
    };
-
    esp_err_t ret = i2c_param_config(I2C_PORT, &config);
    if (ret != ESP_OK)
    {
@@ -34,7 +33,7 @@ esp_err_t i2c_init(void)
    return ret;
 }
 
-esp_err_t i2c_write(uint8_t address, uint8_t size, uint8_t *data)
+esp_err_t I2CWrite(uint8_t address, uint8_t size, uint8_t *data)
 {
    i2c_cmd_handle_t cmd = i2c_cmd_link_create();
    i2c_master_start(cmd);
@@ -56,7 +55,7 @@ esp_err_t i2c_write(uint8_t address, uint8_t size, uint8_t *data)
    return ret;
 }
 
-esp_err_t i2c_read(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data)
+esp_err_t I2CRead(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data)
 {
    // writing to register before reading is a dummy as explained in datasheet to delect register
    i2c_cmd_handle_t cmd = i2c_cmd_link_create();

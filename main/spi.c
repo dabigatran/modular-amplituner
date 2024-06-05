@@ -4,7 +4,7 @@ static const char *TAG = "SPI";
 #define SENDER_HOST HSPI_HOST
 spi_device_handle_t spi_handle;
 
-esp_err_t spi_init(void)
+esp_err_t SpiInit(void)
 {
    spi_bus_config_t bus_config = {
        .miso_io_num = -1,
@@ -23,7 +23,7 @@ esp_err_t spi_init(void)
    return ret;
 }
 
-esp_err_t spi_init2(void)
+esp_err_t SpiInit2(void)
 {
    spi_bus_config_t bus_config = {
        .miso_io_num = -1,
@@ -64,7 +64,7 @@ esp_err_t spi_init2(void)
    return ret;
 }
 
-esp_err_t spi_bus_add_njw1194(void)
+esp_err_t SpiBusAddNjw1194(void)
 {
    spi_device_interface_config_t njw1194_config = {
        .command_bits = 0,
@@ -89,7 +89,7 @@ esp_err_t spi_bus_add_njw1194(void)
    return ret;
 }
 
-esp_err_t spi_bus_remove_njw1194(void)
+esp_err_t SpiBusRemoveNjw1194(void)
 {
    esp_err_t ret = spi_bus_remove_device(spi_handle);
    if (ret != ESP_OK)
@@ -102,7 +102,7 @@ esp_err_t spi_bus_remove_njw1194(void)
    return ret;
 }
 
-esp_err_t spi_write(size_t size, uint8_t *data)
+esp_err_t SpiWrite(size_t size, uint8_t *data)
 {
    spi_transaction_t t = {0};
    t.addr = 0;

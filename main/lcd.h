@@ -34,14 +34,14 @@
 #define LOGE_LCD (uint8_t)0x1
 #define LOGI_LCD (uint8_t)0x0
 
-esp_err_t lcd_init(void);
-esp_err_t lcd_cmd(char cmd);
-esp_err_t lcd_byte(bool is_cmd, char data);
-esp_err_t lcd_text(uint8_t row, uint8_t col, char *data);
-esp_err_t lcd_clear(void);
-esp_err_t lcd_clear_line(uint8_t line);
-esp_err_t lcd_cursor(uint8_t row, uint8_t col);
-esp_err_t lcd_backlight_on();
-esp_err_t lcd_backlight_off();
-uint8_t lcd_position(uint8_t row, uint8_t col);
-void adapt_to_4bits(bool is_cmd, uint8_t char_index, char *source_data, uint8_t d_index, uint8_t *dest_data);
+esp_err_t LcdInit(void);
+esp_err_t LcdCmd(char cmd);
+esp_err_t LcdByte(bool is_cmd, char data);
+esp_err_t LcdText(uint8_t row, uint8_t col, char *data);
+esp_err_t LcdClear(void);
+esp_err_t LcdClearLine(uint8_t line);
+esp_err_t LcdCursor(uint8_t row, uint8_t col);
+esp_err_t LcdBacklightOn();
+esp_err_t LcdBacklightOff();
+uint8_t LcdPosition(uint8_t row, uint8_t col);
+void AdaptTo4bits(bool is_cmd, uint8_t char_index, char *source_data, uint8_t d_index, uint8_t *dest_data);
