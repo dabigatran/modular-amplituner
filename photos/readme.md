@@ -1,1 +1,0 @@
-photos and movie
