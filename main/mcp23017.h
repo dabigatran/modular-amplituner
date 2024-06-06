@@ -9,7 +9,7 @@
 #define _mcp_parameters_H_
 static const uint8_t LOGE_MCP = true;
 static const uint8_t LOGI_MCP = false;
-
+static char* const MCP_TAG = "MCP23017";
 // Registers A
 static const char IODIRA = 0x00;
 static const char IPOLA = 0x02;

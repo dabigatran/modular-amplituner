@@ -1,5 +1,5 @@
 #include "njw1194.h"
-static const char *TAG = "njw1194";
+
 /*
 	njw1194 volume range:
 	mute = value 255 and 0
@@ -26,7 +26,7 @@ esp_err_t Njw1194Init(void)
 esp_err_t NjwWrite(uint8_t chipAddress, uint8_t selectAddress, uint8_t data)
 {
 	if (LOGI_NJW)
-		ESP_LOGI(TAG, "NJW1194 write.");
+		ESP_LOGI(NJW_TAG, "NJW1194 write.");
 	uint8_t spiData[2] = {0, 0};
 	spiData[1] = chipAddress | (selectAddress << 4);
 	spiData[0] = data;
@@ -34,10 +34,10 @@ esp_err_t NjwWrite(uint8_t chipAddress, uint8_t selectAddress, uint8_t data)
 	if (ret != ESP_OK)
 	{
 		if (LOGE_NJW)
-			ESP_LOGE(TAG, "NJW1194 write failed: address %02x, data %02x.", spiData[0], spiData[1]);
+			ESP_LOGE(NJW_TAG, "NJW1194 write failed: address %02x, data %02x.", spiData[0], spiData[1]);
 	}
 	else if (LOGI_NJW)
-		ESP_LOGI(TAG, "NJW1194 write OK: address %02x, data %02x.", spiData[0], spiData[1]);
+		ESP_LOGI(NJW_TAG, "NJW1194 write OK: address %02x, data %02x.", spiData[0], spiData[1]);
 	return ret;
 }
 

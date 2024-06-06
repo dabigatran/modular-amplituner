@@ -16,6 +16,7 @@
 #define _remote_parameters_H_
 static const uint8_t LOGE_RMT = true;
 static const uint8_t LOGI_RMT = false;
+static char * const RMT_TAG = "Remote Control";
 
 
 static const uint8_t REMOTE_DATA = 4; // remote data 4 bytes

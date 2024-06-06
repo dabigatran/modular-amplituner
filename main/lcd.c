@@ -1,9 +1,9 @@
 #include "lcd.h"
-static const char *TAG = "LCD";
+
 
 esp_err_t LcdInit(void)
 {
-	ESP_LOGI(TAG, "Starting initialization (address %02x).", LCD_ADDRESS);
+	ESP_LOGI(LCD_TAG, "Starting initialization (address %02x).", LCD_ADDRESS);
 	esp_err_t success = 0;
 	usleep(50000);
 	success = success + LcdCmd(FUNCTION_SET_0);
@@ -26,50 +26,50 @@ esp_err_t LcdInit(void)
 	success = success + LcdCmd(DISPLAY_SWITCH_ON);
 	usleep(1000);
 	if (success != ESP_OK)
-		ESP_LOGE(TAG, "Initialization failed.");
+		ESP_LOGE(LCD_TAG, "Initialization failed.");
 	else
-		ESP_LOGI(TAG, "Initialization OK.");
+		ESP_LOGI(LCD_TAG, "Initialization OK.");
 	return success;
 }
 
 esp_err_t LcdCmd(char cmd)
 {
 	if (LOGI_LCD)
-		ESP_LOGI(TAG, "Command: %02x", cmd);
+		ESP_LOGI(LCD_TAG, "Command: %02x", cmd);
 	uint8_t i2c_data[4] = {0};
 	AdaptTo4bits(true, 0, &cmd, 0, i2c_data);
 	esp_err_t ret = I2CWrite(LCD_ADDRESS, 4, i2c_data);
 	if (ret != ESP_OK)
 	{
 		if (LOGE_LCD)
-			ESP_LOGE(TAG, "Command failed (%02x).", cmd);
+			ESP_LOGE(LCD_TAG, "Command failed (%02x).", cmd);
 	}
 	else if (LOGI_LCD)
-		ESP_LOGI(TAG, "Command OK (%02x).", cmd);
+		ESP_LOGI(LCD_TAG, "Command OK (%02x).", cmd);
 	return ret;
 }
 
 esp_err_t LcdByte(bool isCmd, char data)
 {
 	if (LOGI_LCD)
-		ESP_LOGI(TAG, "Write: %02x", data);
+		ESP_LOGI(LCD_TAG, "Write: %02x", data);
 	uint8_t i2cData[4] = {0};
 	AdaptTo4bits(isCmd, 0, &data, 0, i2cData);
 	esp_err_t ret = I2CWrite(LCD_ADDRESS, 4, i2cData);
 	if (ret != ESP_OK)
 	{
 		if (LOGE_LCD)
-			ESP_LOGE(TAG, "Write failed (%02x).", data);
+			ESP_LOGE(LCD_TAG, "Write failed (%02x).", data);
 	}
 	else if (LOGI_LCD)
-		ESP_LOGI(TAG, "Write OK (%02x).", data);
+		ESP_LOGI(LCD_TAG, "Write OK (%02x).", data);
 	return ret;
 }
 
 esp_err_t LcdText(uint8_t row, uint8_t col, char *data)
 {
 	if (LOGI_LCD)
-		ESP_LOGI(TAG, "Text write ('%s').", data);
+		ESP_LOGI(LCD_TAG, "Text write ('%s').", data);
 	uint8_t dataLength = strlen(data);
 	uint8_t i2cDataLength = 4 * (dataLength + 1) * sizeof(uint8_t);
 	uint8_t *i2cData = malloc(i2cDataLength);
@@ -92,10 +92,10 @@ esp_err_t LcdText(uint8_t row, uint8_t col, char *data)
 	if (ret != ESP_OK)
 	{
 		if (LOGE_LCD)
-			ESP_LOGE(TAG, "Text write failed ('%s').", data);
+			ESP_LOGE(LCD_TAG, "Text write failed ('%s').", data);
 	}
 	else if (LOGI_LCD)
-		ESP_LOGI(TAG, "Text write OK ('%s').", data);
+		ESP_LOGI(LCD_TAG, "Text write OK ('%s').", data);
 	return ret;
 }
 
@@ -106,10 +106,10 @@ esp_err_t LcdBacklightOn()
 	if (ret != ESP_OK)
 	{
 		if (LOGE_LCD)
-			ESP_LOGE(TAG, "Backlight on failed");
+			ESP_LOGE(LCD_TAG, "Backlight on failed");
 	}
 	else if (LOGI_LCD)
-		ESP_LOGI(TAG, "Backlight on OK.");
+		ESP_LOGI(LCD_TAG, "Backlight on OK.");
 	return ret;
 }
 
@@ -120,10 +120,10 @@ esp_err_t LcdBacklightOff()
 	if (ret != ESP_OK)
 	{
 		if (LOGE_LCD)
-			ESP_LOGE(TAG, "Backlight off failed.");
+			ESP_LOGE(LCD_TAG, "Backlight off failed.");
 	}
 	else if (LOGI_LCD)
-		ESP_LOGI(TAG, "Backlight off OK.");
+		ESP_LOGI(LCD_TAG, "Backlight off OK.");
 	return ret;
 }
 
@@ -133,10 +133,10 @@ esp_err_t LcdClearLine(uint8_t line)
 	if (ret != ESP_OK)
 	{
 		if (LOGE_LCD)
-			ESP_LOGE(TAG, "Clear line failed.");
+			ESP_LOGE(LCD_TAG, "Clear line failed.");
 	}
 	else if (LOGI_LCD)
-		ESP_LOGI(TAG, "Clear line OK.");
+		ESP_LOGI(LCD_TAG, "Clear line OK.");
 	return ret;
 }
 
@@ -147,10 +147,10 @@ esp_err_t LcdClear(void)
 	if (ret != ESP_OK)
 	{
 		if (LOGE_LCD)
-			ESP_LOGE(TAG, "Clear display failed.");
+			ESP_LOGE(LCD_TAG, "Clear display failed.");
 	}
 	else if (LOGI_LCD)
-		ESP_LOGI(TAG, "Clear display OK.");
+		ESP_LOGI(LCD_TAG, "Clear display OK.");
 	return ret;
 }
 
@@ -161,10 +161,10 @@ esp_err_t LcdCursor(uint8_t row, uint8_t col)
 	if (ret != ESP_OK)
 	{
 		if (LOGE_LCD)
-			ESP_LOGI(TAG, "Starting cursor set.");
+			ESP_LOGI(LCD_TAG, "Starting cursor set.");
 	}
 	else if (LOGI_LCD)
-		ESP_LOGI(TAG, "Cursor set OK.");
+		ESP_LOGI(LCD_TAG, "Cursor set OK.");
 	return ret;
 }
 

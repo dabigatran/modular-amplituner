@@ -5,7 +5,13 @@
 #ifndef _i2c_parameters_H_
 #define _i2c_parameters_H_
 static const uint8_t LOGE_I2C = true; // log errors from I2C
-static const uint8_t LOGI_I2C = false; // log info from I2C 
+static const uint8_t LOGI_I2C = false; // log info from I2C
+static char* const I2C_TAG = "I2C";
+
+
+static const size_t I2C_TX_BUF_DISABLE = 0;
+static const size_t I2C_RX_BUF_DISABLE = 0;
+static const int INTR_FLAGS = 0;
 
 static const uint8_t I2C_PORT = I2C_NUM_0; // esp32 has 2 ports NUM_0/NUM_1
 static const uint8_t LCD_ADDRESS = 0x27; // lcd i2c adress

@@ -1,9 +1,9 @@
 #include "mcp23017.h"
 
-static const char *TAG = "MCP23017";
+
 esp_err_t McpInit(uint8_t address)
 {
-   ESP_LOGI(TAG, "Initialization (address %02x).", address);
+   ESP_LOGI(MCP_TAG, "Initialization (address %02x).", address);
    uint8_t value0 = 0x00;
    uint8_t value1 = 0xff;
    uint8_t value3 = 0xfc;// value for IODIRB pins 0-1 as output, 2-7 as input-> 0b11111100                 
@@ -17,13 +17,13 @@ esp_err_t McpInit(uint8_t address)
    // Reverse polarization (IPOLA register) on pins 0-7 bank A
    ret = McpWrite(address, IPOLA, 1, &value1);
    if (ret != ESP_OK)
-      ESP_LOGE(TAG, "Intitialization failed (address %02x).", address);
+      ESP_LOGE(MCP_TAG, "Intitialization failed (address %02x).", address);
    // Set (IODIRB register) pins:  0-1 as output, 2-7 as input-> 0b00111111
    ret = McpWrite(address, IODIRB, 1, &value3);
    if (ret != ESP_OK)
-      ESP_LOGE(TAG, "Initialization failed (address %02x).", address);
+      ESP_LOGE(MCP_TAG, "Initialization failed (address %02x).", address);
    else
-      ESP_LOGI(TAG, "Initialization OK (address %02x).", address);
+      ESP_LOGI(MCP_TAG, "Initialization OK (address %02x).", address);
    // Turn off Pullup resistors (GPPUA register) on pins 0-7 bank A
    ret = McpWrite(address, GPPUA, 1, &value0);
    // Turn on Pullup resistBFors (GPPUB register) on pins 2-7 bank B
@@ -53,10 +53,10 @@ esp_err_t McpWrite(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data)
    if (ret != ESP_OK)
    {
       if (LOGE_MCP)
-         ESP_LOGE(TAG, "Write failed (address %02x, reg %02x, value %02x).", address, reg, *data);
+         ESP_LOGE(MCP_TAG, "Write failed (address %02x, reg %02x, value %02x).", address, reg, *data);
    }
    else if (LOGI_MCP)
-      ESP_LOGI(TAG, "Write OK (address %02x, reg %02x, value %02x).", address, reg, *data);
+      ESP_LOGI(MCP_TAG, "Write OK (address %02x, reg %02x, value %02x).", address, reg, *data);
    free(i2cData);
    return ret;
 }
@@ -67,10 +67,10 @@ esp_err_t McpRead(uint8_t address, uint8_t reg, uint8_t *data)
    if (ret != ESP_OK)
    {
       if (LOGE_MCP)
-         ESP_LOGE(TAG, "Read failed (address %02x, reg %02x).", address, reg);
+         ESP_LOGE(MCP_TAG, "Read failed (address %02x, reg %02x).", address, reg);
    }
    else if (LOGI_MCP)
-      ESP_LOGI(TAG, "Read OK (address %02x, reg %02x, data %02x).", address, reg, *data);
+      ESP_LOGI(MCP_TAG, "Read OK (address %02x, reg %02x, data %02x).", address, reg, *data);
    return ret;
 }
 
@@ -81,18 +81,18 @@ esp_err_t McpSetPin(uint8_t address, uint8_t reg, uint8_t pin)
    if (McpRead(address, reg, &value) != ESP_OK)
    {
       if (LOGE_MCP)
-         ESP_LOGE(TAG, "Unable to read pin %d value (address %02x, reg %02x).", pin, address, reg);
+         ESP_LOGE(MCP_TAG, "Unable to read pin %d value (address %02x, reg %02x).", pin, address, reg);
       return ESP_FAIL;
    }
    value |= 1 << pin;
    if (McpWrite(address, reg, size, &value) != ESP_OK)
    {
       if (LOGE_MCP)
-         ESP_LOGE(TAG, "Unable to set pin %d value (address %02x, reg %02x).", pin, address, reg);
+         ESP_LOGE(MCP_TAG, "Unable to set pin %d value (address %02x, reg %02x).", pin, address, reg);
       return ESP_FAIL;
    }
    else if (LOGI_MCP)
-      ESP_LOGI(TAG, "Set pin OK (address %02x, reg %02x, pin %d).", address, reg, pin);
+      ESP_LOGI(MCP_TAG, "Set pin OK (address %02x, reg %02x, pin %d).", address, reg, pin);
    return ESP_OK;
 }
 
@@ -103,18 +103,18 @@ esp_err_t McpClearPin(uint8_t address, uint8_t reg, uint8_t pin)
    if (McpRead(address, reg, &value) != ESP_OK)
    {
       if (LOGE_MCP)
-         ESP_LOGE(TAG, "Unable to read bit %d value (address %02x, reg %02x).", pin, address, reg);
+         ESP_LOGE(MCP_TAG, "Unable to read bit %d value (address %02x, reg %02x).", pin, address, reg);
       return ESP_FAIL;
    }
    value &= ~(1 << pin);
    if (McpWrite(address, reg, size, &value) != ESP_OK)
    {
       if (LOGE_MCP)
-         ESP_LOGE(TAG, "Unable to clear pin %02X on peripheral (address %02x, reg %02x).", pin, address, reg);
+         ESP_LOGE(MCP_TAG, "Unable to clear pin %02X on peripheral (address %02x, reg %02x).", pin, address, reg);
       return ESP_FAIL;
    }
    else if (LOGI_MCP)
-      ESP_LOGI(TAG, "Cleared pin OK (address %02x, reg %02x, bit %d).", address, reg, pin);
+      ESP_LOGI(MCP_TAG, "Cleared pin OK (address %02x, reg %02x, bit %d).", address, reg, pin);
 
    return ESP_OK;
 };

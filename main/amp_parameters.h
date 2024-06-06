@@ -1,11 +1,12 @@
-#ifndef _amp_parameters_H_
-#define _amp_parameters_H_
 #define OPTION_NO (uint8_t)7
 #define VAR_NO (uint8_t)5
 #define MAX_SRC_ALIAS_LENGTH (uint8_t)16
 #define MAX_OPT_ALIAS_LENGTH (uint8_t)12
 #define MAX_SOURCES (uint8_t)9
 
+#ifndef _amp_parameters_H_
+#define _amp_parameters_H_
+static char* const AMP_TAG = "AmpliTuner";
 static const gpio_num_t LED_GPIO = GPIO_NUM_2;
 static const gpio_num_t STANDBY_BUTTON_GPIO = GPIO_NUM_27;
 static const gpio_num_t AUDIO_POWER_CONTROL_GPIO = GPIO_NUM_18;
@@ -13,6 +14,8 @@ static const gpio_num_t DIGITAL_POWER_CONTROL_GPIO = GPIO_NUM_26;
 static const gpio_num_t AMP_AUDIO_CONTROL_GPIO = GPIO_NUM_25;
 static const gpio_num_t AMP_POWER_CONTROL_GPIO = GPIO_NUM_33;
 
+static const int8_t VOL_MIN = 0;
+static const int8_t VOL_MAX = 40;
 static const int8_t SRC_MAX = 7;
 static const int8_t SRC_MIN = 0;
 static const int8_t BAL_MAX = 20;
@@ -50,6 +53,5 @@ static const int8_t RMT_QUEUE_LENGTH = 20;
 static const int8_t ON = 1;
 static const int8_t OFF = 0;
 static const int8_t MY_CONSTANT = 23;
-static const int8_t VOL_MIN = 0;
-static const int8_t VOL_MAX = 40;
+
 #endif

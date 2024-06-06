@@ -14,7 +14,7 @@
 #define _njw_parameters_H_
 static const uint8_t LOGE_NJW = true;
 static const uint8_t LOGI_NJW = false;
-
+static char * const NJW_TAG = "njw1194";
 // chip address (byte[0], low nibble)
 static const uint8_t CHIP_ADDRESS = 0x00;
 

@@ -14,6 +14,7 @@
 
 static const uint8_t LOGE_LCD = true;
 static const uint8_t LOGI_LCD = false;
+static char* const LCD_TAG = "LCD";
 
 static const uint8_t ROWS = 2;
 static const uint8_t COLS = 16;

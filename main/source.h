@@ -15,6 +15,7 @@
 #define _source_parameters_H_
 static const uint8_t LOGE_SRC = true;
 static const uint8_t LOGI_SRC = false;
+static char* const SRC_TAG = "Source";
 // Number of ports
 static const uint8_t HDMI_NO = 4;
 static const uint8_t I2S_NO = 4;

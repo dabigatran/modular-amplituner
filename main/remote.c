@@ -1,7 +1,5 @@
 #include "remote.h"
 
-static const char *TAG = "Remote Control";
-
 bool RmtRxDoneCallback(rmt_channel_handle_t channel, const rmt_rx_done_event_data_t *edata, void *userData)
 {
     BaseType_t highTaskWakeup = pdFALSE;
@@ -38,6 +36,8 @@ int8_t RemoteParse(int8_t (*tunerState)[VAR_NO], QueueHandle_t remoteQueue)
             return VOLUME;
         }
     }
+    if (LOGI_RMT)
+            ESP_LOGI(RMT_TAG, "Equipment code: %02x, function code: %02x", remoteCode[0], remoteCode[1]);
     return NONE;
 }
 

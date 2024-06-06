@@ -1,10 +1,5 @@
 #include "i2c.h"
 
-static const char *TAG = "I2C";
-static const size_t I2C_TX_BUF_DISABLE = 0;
-static const size_t I2C_RX_BUF_DISABLE = 0;
-static const int INTR_FLAGS = 0;
-
 esp_err_t I2CInit(void)
 {
    i2c_config_t config = {
@@ -18,18 +13,18 @@ esp_err_t I2CInit(void)
    esp_err_t ret = i2c_param_config(I2C_PORT, &config);
    if (ret != ESP_OK)
    {
-      ESP_LOGE(TAG, "Unable to set parameters.");
-      ESP_LOGE(TAG, "Description: %s", esp_err_to_name(ret));
+      ESP_LOGE(I2C_TAG, "Unable to set parameters.");
+      ESP_LOGE(I2C_TAG, "Description: %s", esp_err_to_name(ret));
       return ret;
    }
    ret = i2c_driver_install(I2C_PORT, config.mode, I2C_TX_BUF_DISABLE, I2C_RX_BUF_DISABLE, INTR_FLAGS);
    if (ret != ESP_OK)
    {
-      ESP_LOGE(TAG, "Unable to install driver.");
-      ESP_LOGE(TAG, "Description: %s", esp_err_to_name(ret));
+      ESP_LOGE(I2C_TAG, "Unable to install driver.");
+      ESP_LOGE(I2C_TAG, "Description: %s", esp_err_to_name(ret));
    }
    else
-      ESP_LOGI(TAG, "Driver initialized.");
+      ESP_LOGI(I2C_TAG, "Driver initialized.");
    return ret;
 }
 
@@ -45,12 +40,12 @@ esp_err_t I2CWrite(uint8_t address, uint8_t size, uint8_t *data)
    if (ret == ESP_FAIL)
    {
       if (LOGE_I2C)
-         ESP_LOGE(TAG, "Unable to write (address %02x).", address);
+         ESP_LOGE(I2C_TAG, "Unable to write (address %02x).", address);
       if (LOGE_I2C)
-         ESP_LOGE(TAG, "description: %s", esp_err_to_name(ret));
+         ESP_LOGE(I2C_TAG, "description: %s", esp_err_to_name(ret));
    }
    else if (LOGI_I2C)
-      ESP_LOGI(TAG, "Write OK (address %02x).", address);
+      ESP_LOGI(I2C_TAG, "Write OK (address %02x).", address);
 
    return ret;
 }
@@ -68,9 +63,9 @@ esp_err_t I2CRead(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data)
    if (ret == ESP_FAIL)
    {
       if (LOGE_I2C)
-         ESP_LOGE(TAG, "Unable to write (address %02x, reg %02x", address, reg);
+         ESP_LOGE(I2C_TAG, "Unable to write (address %02x, reg %02x", address, reg);
       if (LOGE_I2C)
-         ESP_LOGE(TAG, "Description: %s", esp_err_to_name(ret));
+         ESP_LOGE(I2C_TAG, "Description: %s", esp_err_to_name(ret));
    }
    // read byte
    cmd = i2c_cmd_link_create();
@@ -83,11 +78,11 @@ esp_err_t I2CRead(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data)
    if (ret == ESP_FAIL)
    {
       if (LOGE_I2C)
-         ESP_LOGE(TAG, "Unable to read (address %02x, reg %02x", address, reg);
+         ESP_LOGE(I2C_TAG, "Unable to read (address %02x, reg %02x", address, reg);
       if (LOGE_I2C)
-         ESP_LOGE(TAG, "Description: %s", esp_err_to_name(ret));
+         ESP_LOGE(I2C_TAG, "Description: %s", esp_err_to_name(ret));
    }
    else if (LOGI_I2C)
-      ESP_LOGI(TAG, "Read OK (address %02x, reg %02x).", address, reg);
+      ESP_LOGI(I2C_TAG, "Read OK (address %02x, reg %02x).", address, reg);
    return ret;
 }

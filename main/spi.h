@@ -5,10 +5,13 @@
 #include "driver/i2c.h"
 #include "driver/spi_master.h"
 #include "amp_parameters.h"
+
 #ifndef _spi_parameters_H_
 #define _spi_parameters_H_
+static const spi_host_device_t SENDER_HOST=HSPI_HOST;
 static const uint8_t LOGE_SPI = true;
 static const uint8_t LOGI_SPI = false;
+static char* const SPI_TAG = "SPI";
 
 static const gpio_num_t GPIO_MOSI = GPIO_NUM_13;
 static const gpio_num_t GPIO_MISO= GPIO_NUM_12;

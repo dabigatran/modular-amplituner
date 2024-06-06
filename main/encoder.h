@@ -15,6 +15,7 @@
 #define _encoder_parameters_H_
 static const uint8_t LOGE_ENC = true;
 static const uint8_t LOGI_ENC = false;
+static char* const ENC_TAG = "Encoder";
 
 /* MCP1, GPIOB values (8 bits), PIN 2-7 */
 static const uint8_t ENCODER_DATA = 2;
