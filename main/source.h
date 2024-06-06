@@ -9,9 +9,7 @@
 #include "lcd.h"
 #include "amp_parameters.h"
 #include "njw1194.h"
-#define MAX_SRC_ALIAS_LENGTH 16
-#define MAX_OPT_ALIAS_LENGTH 12
-#define MAX_SOURCES 9
+
 
 #ifndef _source_parameters_H_
 #define _source_parameters_H_

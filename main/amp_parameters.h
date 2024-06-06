@@ -1,7 +1,10 @@
 #ifndef _amp_parameters_H_
 #define _amp_parameters_H_
-#define OPTION_NO (int8_t)7
-#define VAR_NO (int8_t)5
+#define OPTION_NO (uint8_t)7
+#define VAR_NO (uint8_t)5
+#define MAX_SRC_ALIAS_LENGTH (uint8_t)16
+#define MAX_OPT_ALIAS_LENGTH (uint8_t)12
+#define MAX_SOURCES (uint8_t)9
 
 static const gpio_num_t LED_GPIO = GPIO_NUM_2;
 static const gpio_num_t STANDBY_BUTTON_GPIO = GPIO_NUM_27;
