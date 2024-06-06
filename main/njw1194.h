@@ -39,7 +39,7 @@
 
 //<TSW : Tone Control By-pass Switch > used with TREBLE_CTRL
 #define TONE_CTRL_OFF (uint8_t)0x00 // byte[1], bit 2
-#define TONE_CTRL_ON (uint8_t)0x01  // byte[1], bit 2
+#define TONE_CTRL_ON (uint8_t)0x01  // byte[1], bit 2AAAA
 
 #define LOGE_NJW 0x01
 #define LOGI_NJW 0x00
