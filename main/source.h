@@ -13,7 +13,7 @@
 
 #ifndef _source_parameters_H_
 #define _source_parameters_H_
-static const uint8_t LOGE_SRC = true;
+static const uint8_t LOGE_SRC = false;
 static const uint8_t LOGI_SRC = false;
 static char* const SRC_TAG = "Source";
 // Number of ports

@@ -8,10 +8,8 @@ bool RmtRxDoneCallback(rmt_channel_handle_t channel, const rmt_rx_done_event_dat
     return highTaskWakeup == pdTRUE;
 }
 
-int8_t RemoteParse(int8_t (*tunerState)[VAR_NO], QueueHandle_t remoteQueue)
+int8_t RemoteParse(int8_t (*tunerState)[VAR_NO], uint16_t remoteCode[2])
 {
-    uint16_t remoteCode[2] = {0};
-    xQueueReceive(remoteQueue, &remoteCode, PORT_DELAY);
     if (remoteCode[0] == CHROMECAST_ADDRESS)
     {
         switch (remoteCode[1])
@@ -37,7 +35,9 @@ int8_t RemoteParse(int8_t (*tunerState)[VAR_NO], QueueHandle_t remoteQueue)
         }
     }
     if (LOGI_RMT)
-            ESP_LOGI(RMT_TAG, "Equipment code: %02x, function code: %02x", remoteCode[0], remoteCode[1]);
+    {
+        ESP_LOGI(RMT_TAG, "Equipment code: %02x, function code: %02x", remoteCode[0], remoteCode[1]);
+    }
     return NONE;
 }
 

@@ -3,43 +3,57 @@
 
 esp_err_t McpInit(uint8_t address)
 {
-   ESP_LOGI(MCP_TAG, "Initialization (address %02x).", address);
+   if (LOGI_MCP)
+   {
+      ESP_LOGI(MCP_TAG, "Initialization (address %02x).", address);
+   }
+   esp_err_t success = 0;
    uint8_t value0 = 0x00;
    uint8_t value1 = 0xff;
    uint8_t value3 = 0xfc;// value for IODIRB pins 0-1 as output, 2-7 as input-> 0b11111100                 
    uint8_t value4 = 0x04; // value for IOCONB - INTB - OPendrain
    uint8_t value5 = 0xb4;
-   esp_err_t ret;
+
    // Interrupts bank B -OpenDrain (IOCONB - config register)
-   ret = McpWrite(address, IOCONB, 1, &value4);
+   success =success + McpWrite(address, IOCONB, 1, &value4);
+
    // Set (IODIRA register) pins 0-7 bank A as INPUT
-   ret = McpWrite(address, IODIRA, 1, &value1);
+   success =success + McpWrite(address, IODIRA, 1, &value1);
+   
    // Reverse polarization (IPOLA register) on pins 0-7 bank A
-   ret = McpWrite(address, IPOLA, 1, &value1);
-   if (ret != ESP_OK)
-      ESP_LOGE(MCP_TAG, "Intitialization failed (address %02x).", address);
+   success =success + McpWrite(address, IPOLA, 1, &value1);
+      
    // Set (IODIRB register) pins:  0-1 as output, 2-7 as input-> 0b00111111
-   ret = McpWrite(address, IODIRB, 1, &value3);
-   if (ret != ESP_OK)
-      ESP_LOGE(MCP_TAG, "Initialization failed (address %02x).", address);
-   else
-      ESP_LOGI(MCP_TAG, "Initialization OK (address %02x).", address);
+   success =success + McpWrite(address, IODIRB, 1, &value3);
+
    // Turn off Pullup resistors (GPPUA register) on pins 0-7 bank A
-   ret = McpWrite(address, GPPUA, 1, &value0);
+   success =success + McpWrite(address, GPPUA, 1, &value0);
+
    // Turn on Pullup resistBFors (GPPUB register) on pins 2-7 bank B
-   ret = McpWrite(address, GPPUB, 1, &value3);
+   success =success + McpWrite(address, GPPUB, 1, &value3);
+
    // Reverse polarization (IPOLB register) on pins 2-7 bank B
-   ret = McpWrite(address, IPOLB, 1, &value3);
+   success =success + McpWrite(address, IPOLB, 1, &value3);
+
    // Interrupt on change (GPINTENB register) on pins 2-7 bank B
-   ret = McpWrite(address, GPINTENB, 1, &value5);
+   success =success + McpWrite(address, GPINTENB, 1, &value5);
 
    // DEFAULT COMPARE REGISTER FOR INTERRUPT-ON-CHANGE (DEFVALB register) on pins 2-7 bank B
-   ret = McpWrite(address, DEFVALB, 1, &value0);
+   success =success + McpWrite(address, DEFVALB, 1, &value0);
 
    // INTERRUPT CONTROL REGISTER (INCONB), If a bit is set, the corresponding I/O pin is compared
    // against the associated bit in the DEFVAL register.
-   ret = McpWrite(address, INTCONB, 1, &value0);
-   return ret;
+   success =success + McpWrite(address, INTCONB, 1, &value0);
+   
+   if (LOGE_MCP && success != ESP_OK)
+   {
+      ESP_LOGE(MCP_TAG, "Intitialization failed (address %02x).", address);
+   }
+   else if (LOGI_MCP)
+   {
+      ESP_LOGI(MCP_TAG, "Initialization OK (address %02x).", address);
+   }
+   return success;
 }
 
 esp_err_t McpWrite(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data)
@@ -50,13 +64,14 @@ esp_err_t McpWrite(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data)
    i2cData[0] = reg;
    memcpy(i2cData + (uint8_t)1, data, size);
    esp_err_t ret = I2CWrite(address, i2cSize, i2cData);
-   if (ret != ESP_OK)
+   if (LOGE_MCP && ret != ESP_OK)
    {
-      if (LOGE_MCP)
-         ESP_LOGE(MCP_TAG, "Write failed (address %02x, reg %02x, value %02x).", address, reg, *data);
+      ESP_LOGE(MCP_TAG, "Write failed (address %02x, reg %02x, value %02x).", address, reg, *data);
    }
    else if (LOGI_MCP)
+   {
       ESP_LOGI(MCP_TAG, "Write OK (address %02x, reg %02x, value %02x).", address, reg, *data);
+   }   
    free(i2cData);
    return ret;
 }
@@ -64,13 +79,14 @@ esp_err_t McpWrite(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data)
 esp_err_t McpRead(uint8_t address, uint8_t reg, uint8_t *data)
 {
    esp_err_t ret = I2CRead(address, reg, 1, data);
-   if (ret != ESP_OK)
+   if (LOGE_MCP && ret != ESP_OK)
    {
-      if (LOGE_MCP)
-         ESP_LOGE(MCP_TAG, "Read failed (address %02x, reg %02x).", address, reg);
+      ESP_LOGE(MCP_TAG, "Read failed (address %02x, reg %02x).", address, reg);
    }
    else if (LOGI_MCP)
+   {
       ESP_LOGI(MCP_TAG, "Read OK (address %02x, reg %02x, data %02x).", address, reg, *data);
+   }
    return ret;
 }
 
@@ -78,21 +94,21 @@ esp_err_t McpSetPin(uint8_t address, uint8_t reg, uint8_t pin)
 {
    uint8_t value;
    uint8_t size = 1;
-   if (McpRead(address, reg, &value) != ESP_OK)
+   esp_err_t ret = McpRead(address, reg, &value); 
+   if (LOGE_MCP && ret!= ESP_OK)
    {
-      if (LOGE_MCP)
-         ESP_LOGE(MCP_TAG, "Unable to read pin %d value (address %02x, reg %02x).", pin, address, reg);
       return ESP_FAIL;
    }
    value |= 1 << pin;
-   if (McpWrite(address, reg, size, &value) != ESP_OK)
+   ret = McpWrite(address, reg, size, &value);
+   if (LOGE_MCP && ret != ESP_OK)
    {
-      if (LOGE_MCP)
-         ESP_LOGE(MCP_TAG, "Unable to set pin %d value (address %02x, reg %02x).", pin, address, reg);
       return ESP_FAIL;
    }
    else if (LOGI_MCP)
+   {
       ESP_LOGI(MCP_TAG, "Set pin OK (address %02x, reg %02x, pin %d).", address, reg, pin);
+   }
    return ESP_OK;
 }
 
@@ -100,21 +116,20 @@ esp_err_t McpClearPin(uint8_t address, uint8_t reg, uint8_t pin)
 {
    uint8_t value;
    uint8_t size = 1;
-   if (McpRead(address, reg, &value) != ESP_OK)
+   esp_err_t ret = McpRead(address, reg, &value); 
+   if (LOGE_MCP && ret != ESP_OK)
    {
-      if (LOGE_MCP)
-         ESP_LOGE(MCP_TAG, "Unable to read bit %d value (address %02x, reg %02x).", pin, address, reg);
       return ESP_FAIL;
    }
    value &= ~(1 << pin);
-   if (McpWrite(address, reg, size, &value) != ESP_OK)
+   ret = McpWrite(address, reg, size, &value);
+   if (LOGE_MCP && ret != ESP_OK)
    {
-      if (LOGE_MCP)
-         ESP_LOGE(MCP_TAG, "Unable to clear pin %02X on peripheral (address %02x, reg %02x).", pin, address, reg);
       return ESP_FAIL;
    }
    else if (LOGI_MCP)
+   {
       ESP_LOGI(MCP_TAG, "Cleared pin OK (address %02x, reg %02x, bit %d).", address, reg, pin);
-
+   }
    return ESP_OK;
 };

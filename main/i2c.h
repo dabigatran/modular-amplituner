@@ -4,7 +4,7 @@
 #include "driver/i2c.h"
 #ifndef _i2c_parameters_H_
 #define _i2c_parameters_H_
-static const uint8_t LOGE_I2C = true; // log errors from I2C
+static const uint8_t LOGE_I2C = false; // log errors from I2C
 static const uint8_t LOGI_I2C = false; // log info from I2C
 static char* const I2C_TAG = "I2C";
 

@@ -6,6 +6,9 @@
 
 #ifndef _amp_parameters_H_
 #define _amp_parameters_H_
+static const uint8_t LOGE_MAIN = false;
+static const uint8_t LOGI_MAIN = false;
+
 static char* const AMP_TAG = "AmpliTuner";
 static const gpio_num_t LED_GPIO = GPIO_NUM_2;
 static const gpio_num_t STANDBY_BUTTON_GPIO = GPIO_NUM_27;

@@ -1,6 +1,4 @@
 #include "spi.h"
-
-
 static spi_device_handle_t spiHandle;
 
 esp_err_t SpiInit(void)
@@ -13,17 +11,16 @@ esp_err_t SpiInit(void)
        .quadhd_io_num = -1,
        .max_transfer_sz = 10};
    esp_err_t ret = spi_bus_initialize(SENDER_HOST, &busConfig, SPI_DMA_CH_AUTO);
-   if (ret != ESP_OK)
+   if (LOGE_SPI && ret != ESP_OK)
    {
       ESP_LOGE(SPI_TAG, "Unable to init spi.");
-      ESP_LOGE(SPI_TAG, "Description: %s", esp_err_to_name(ret));
-      return ret;
    }
    return ret;
 }
 
 esp_err_t SpiInit2(void)
 {
+   esp_err_t success=0;
    spi_bus_config_t busConfig = {
        .miso_io_num = -1,
        .mosi_io_num = GPIO_MOSI,
@@ -45,22 +42,17 @@ esp_err_t SpiInit2(void)
        .queue_size = 10,
    };
 
-   esp_err_t ret = spi_bus_initialize(SENDER_HOST, &busConfig, SPI_DMA_CH_AUTO);
-   if (ret != ESP_OK)
+   success = spi_bus_initialize(SENDER_HOST, &busConfig, SPI_DMA_CH_AUTO);
+   success = success + spi_bus_add_device(SENDER_HOST, &njw1194Config, &spiHandle);
+   if (LOGE_SPI && success != ESP_OK)
    {
       ESP_LOGE(SPI_TAG, "Unable to init spi.");
-      ESP_LOGE(SPI_TAG, "Description: %s", esp_err_to_name(ret));
-      return ret;
    }
-   ret = spi_bus_add_device(SENDER_HOST, &njw1194Config, &spiHandle);
-   if (ret != ESP_OK)
+   else if (LOGI_SPI)
    {
-      ESP_LOGE(SPI_TAG, "Unable to add njw1194.");
-      ESP_LOGE(SPI_TAG, "Description: %s", esp_err_to_name(ret));
-   }
-   else
       ESP_LOGI(SPI_TAG, "SPI initialized.");
-   return ret;
+   }
+   return success;
 }
 
 esp_err_t SpiBusAddNjw1194(void)
@@ -78,26 +70,28 @@ esp_err_t SpiBusAddNjw1194(void)
        .queue_size = 10,
    };
    esp_err_t ret = spi_bus_add_device(SENDER_HOST, &njw1194Config, &spiHandle);
-   if (ret != ESP_OK)
+   if (LOGE_SPI && ret != ESP_OK)
    {
       ESP_LOGE(SPI_TAG, "Unable to add njw1194 to spi bus.");
-      ESP_LOGE(SPI_TAG, "Description: %s", esp_err_to_name(ret));
    }
-   else
+   else if (LOGI_SPI)
+   {
       ESP_LOGI(SPI_TAG, "njw1194 added to spi bus.");
+   }
    return ret;
 }
 
 esp_err_t SpiBusRemoveNjw1194(void)
 {
    esp_err_t ret = spi_bus_remove_device(spiHandle);
-   if (ret != ESP_OK)
+   if (LOGE_SPI && ret != ESP_OK)
    {
       ESP_LOGE(SPI_TAG, "Unable to remove njw1194 from spi bus.");
-      ESP_LOGE(SPI_TAG, "Description: %s", esp_err_to_name(ret));
    }
-   else
+   else if (LOGI_SPI)
+   {
       ESP_LOGI(SPI_TAG, "njw1194 removed from spi bus.");
+   }
    return ret;
 }
 
@@ -109,15 +103,13 @@ esp_err_t SpiWrite(size_t size, uint8_t *data)
    t.rxlength = 0;
    t.tx_buffer = data;
    esp_err_t ret = spi_device_transmit(spiHandle, &t);
-   if (ret == ESP_FAIL)
+   if (LOGE_SPI && ret == ESP_FAIL)
    {
-      if (LOGE_SPI)
          ESP_LOGE(SPI_TAG, "Unable to write to spi.");
-      if (LOGE_SPI)
-         ESP_LOGE(SPI_TAG, "description: %s", esp_err_to_name(ret));
    }
    else if (LOGI_SPI)
+   {
       ESP_LOGI(SPI_TAG, "SPI write OK.");
-
+   }
    return ret;
 }

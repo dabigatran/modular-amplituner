@@ -1,5 +1,4 @@
 #include "source.h"
-
 static uint8_t sourcesMap[MAX_SOURCES] = {NOT_FOUND};
 static uint8_t sourcesAvailable[MAX_SOURCES] = {NOT_FOUND};
 
@@ -50,7 +49,9 @@ int8_t HdmiNibToSource(int8_t nibValue)
     for (int8_t i = SOURCE1; i <= SOURCE4; i++)
     {
         if (nibValue == sourcesMap[i])
+        {
             return i;
+        }
     }
     return 0;
 }
@@ -60,7 +61,9 @@ int8_t I2sNibToSource(int8_t nibValue)
     for (int8_t i = SOURCE5; i <= SOURCE8; i++)
     {
         if (nibValue == sourcesMap[i])
+        {
             return i;
+        }
     }
     return 0;
 }
@@ -97,13 +100,17 @@ void SetSource(int8_t (*tunerState)[VAR_NO])
     /*Change to available source*/
     int8_t changeResponse = ChangeSource(tunerState[SOURCE][ACT_VAL]);
     if (changeResponse != tunerState[SOURCE][ACT_VAL])
+    {
         tunerState[SOURCE][ACT_VAL] = changeResponse;
+    }
 }
 
 int8_t ChangeSource(int8_t source)
 {
     if (LOGI_SRC)
+    {
         ESP_LOGI(SRC_TAG, "Change source: %d", source);
+    }
     switch (source)
     {
     case SOURCE0: // analog
@@ -143,7 +150,9 @@ int8_t ToggleHdmi(int8_t source)
         McpRead(MCP1_ADDRESS, GPIOA, &value);
         nib[SET] = (int8_t)value & 0x0f;
         if (LOGI_SRC)
+        {
             ESP_LOGI(SRC_TAG, "hdmi toggle->selected: %02x, set: %02x", nib[SEARCHED], nib[SET]);
+        }
 
         // new device plugged during operation (was not on available map)
         // add this device to availbility map and set source to the device
@@ -184,13 +193,17 @@ int8_t ToggleI2S(int8_t source)
         McpRead(MCP1_ADDRESS, GPIOA, &value);
         nib[SET] = (int8_t)(value >> 4) & 0x0f;
         if (LOGI_SRC)
+        {
             ESP_LOGI(SRC_TAG, "i2s toggle->selected: %02x, set: %02x", nib[SEARCHED], nib[SET]);
+        }
         if (nib[SEARCHED] != nib[SET])
         {
             SwitchI2s();
         }
         else
+        {
             break;
+        }
     }
     return I2sNibToSource(nib[SET]);
 }

@@ -12,7 +12,7 @@
 #ifndef _lcd_parameters_H_
 #define _lcd_parameters_H_
 
-static const uint8_t LOGE_LCD = true;
+static const uint8_t LOGE_LCD = false;
 static const uint8_t LOGI_LCD = false;
 static char* const LCD_TAG = "LCD";
 

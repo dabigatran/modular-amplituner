@@ -92,9 +92,10 @@ void app_main(void)
 static void IsrInit()
 {
   esp_err_t ret = gpio_install_isr_service(ESP_INTR_FLAG_IRAM);
-  if (ret != ESP_OK)
-    if (LOGE_ENC)
-      ESP_LOGE(AMP_TAG, "ISR install error.");
+  if (LOGE_MAIN && ret != ESP_OK)
+  {
+    ESP_LOGE(AMP_TAG, "ISR install error.");
+  }
 }
 
 static void Initialize(void)
@@ -110,7 +111,9 @@ static void Initialize(void)
   SetupAudioDefaults();
   SetupRemoteTasks();
   BlinkLed(ON);
-  ESP_LOGI(AMP_TAG, "Init finished. standby: %d", standbyMode);
+  if(LOGI_MAIN){
+    ESP_LOGI(AMP_TAG, "Init finished. standby: %d", standbyMode);
+  }
   standbyInterruptSemaphore = xSemaphoreCreateBinary();
 }
 
@@ -154,12 +157,14 @@ static void IRAM_ATTR EncoderGetLoop()
 
 static void IRAM_ATTR EncoderSetLoop()
 {
+  uint8_t interruptData[2] = {0};
   while (1)
   {
-    uint8_t interruptData[2] = {0};
-    xQueueReceive(encoderQueue, &interruptData, PORT_DELAY);
-    int8_t lastChange = CreateSnapshot(tunerState, interruptData);
-    SetChange(lastChange);
+    if(xQueueReceive(encoderQueue, &interruptData, PORT_DELAY)!=pdFALSE)
+    {
+      int8_t lastChange = CreateSnapshot(tunerState, interruptData);
+      SetChange(lastChange);
+    }
   }
 }
 
@@ -193,7 +198,10 @@ static void IRAM_ATTR EncoderInterruptClearLoop()
 static void IRAM_ATTR RemoteGetLoop()
 {
   remoteQueue = xQueueCreate(RMT_QUEUE_LENGTH, REMOTE_DATA);
-  ESP_LOGI(AMP_TAG, "create RMT RX channel");
+  if (LOGI_MAIN)
+  {
+    ESP_LOGI(AMP_TAG, "Create RMT RX channel.");
+  }
   rmt_rx_channel_config_t rxChannelCfg = {
       .clk_src = RMT_CLK_SRC_DEFAULT,
       .resolution_hz = IR_RESOLUTION_HZ,
@@ -202,8 +210,11 @@ static void IRAM_ATTR RemoteGetLoop()
   };
   rmt_channel_handle_t rxChannel = NULL;
   ESP_ERROR_CHECK(rmt_new_rx_channel(&rxChannelCfg, &rxChannel));
-
-  ESP_LOGI(AMP_TAG, "register RX done callback");
+  
+  if (LOGI_MAIN)
+  {
+    ESP_LOGI(AMP_TAG, "Register RX done callback.");
+  }
   QueueHandle_t receiveQueue = xQueueCreate(1, sizeof(rmt_rx_done_event_data_t));
   assert(receiveQueue);
   rmt_rx_event_callbacks_t cbs = {
@@ -232,10 +243,14 @@ static void IRAM_ATTR RemoteGetLoop()
 
 static void IRAM_ATTR RemoteSetLoop()
 {
+  uint16_t remoteCode[2] = {0};
   while (1)
   {
-    int8_t lastChange = RemoteParse(tunerState, remoteQueue);
-    SetChange(lastChange);
+    if(xQueueReceive(remoteQueue, &remoteCode, PORT_DELAY)!=pdFALSE)
+    {
+      int8_t lastChange = RemoteParse(tunerState, remoteCode);
+      SetChange(lastChange);
+    }
   }
 }
 
@@ -261,30 +276,26 @@ static void EncoderIsrHandlerAdd(void)
   ioConf.pull_up_en = GPIO_PULLUP_ENABLE;
   gpio_config(&ioConf);
   esp_err_t ret = gpio_isr_handler_add(INTR_PIN, EncoderInterruptHandler, NULL);
-  if (ret != ESP_OK)
+  if (LOGE_MAIN && ret != ESP_OK)
   {
-    if (LOGE_ENC)
-      ESP_LOGE(AMP_TAG, "Encoder handler add error.");
+    ESP_LOGE(AMP_TAG, "Encoder handler add error.");
   }
-  else
+  else if (LOGI_MAIN)
   {
-    if (LOGI_ENC)
-      ESP_LOGI(AMP_TAG, "Encoder handler add OK.");
+    ESP_LOGI(AMP_TAG, "Encoder handler add OK.");
   }
 }
 
 static void EncoderIsrHandlerRemove(void)
 {
   esp_err_t ret = gpio_isr_handler_remove(INTR_PIN);
-  if (ret != ESP_OK)
+  if (LOGE_MAIN && ret != ESP_OK)
   {
-    if (LOGE_ENC)
-      ESP_LOGE(AMP_TAG, "Encoder handler remove error.");
+    ESP_LOGE(AMP_TAG, "Encoder handler remove error.");
   }
-  else
+  else if (LOGI_MAIN) 
   {
-    if (LOGI_ENC)
-      ESP_LOGI(AMP_TAG, "Encoder handler remove OK.");
+    ESP_LOGI(AMP_TAG, "Encoder handler remove OK.");
   }
 }
 
@@ -298,15 +309,13 @@ static void StandbyIsrHandlerAdd(void)
   ioConf.pull_up_en = GPIO_PULLUP_ENABLE;
   gpio_config(&ioConf);
   esp_err_t ret = gpio_isr_handler_add(STANDBY_BUTTON_GPIO, StandbyInterruptHandler, NULL);
-  if (ret != ESP_OK)
+  if (LOGE_MAIN && ret != ESP_OK)
   {
-    if (LOGE_ENC)
-      ESP_LOGE(AMP_TAG, "Standby handler add error.");
+    ESP_LOGE(AMP_TAG, "Standby handler add error.");
   }
-  else
+  else if (LOGI_MAIN)
   {
-    if (LOGI_ENC)
-      ESP_LOGI(AMP_TAG, "Standby handler add OK.");
+    ESP_LOGI(AMP_TAG, "Standby handler add OK.");
   }
 }
 
@@ -439,7 +448,10 @@ static void Standby(uint8_t state)
 {
   if (state == ON)
   {
-    ESP_LOGI(AMP_TAG, "Going into standby mode.");
+    if (LOGI_MAIN)
+    {
+      ESP_LOGI(AMP_TAG, "Going into standby mode.");
+    }
     AmpAudioControl(ON);
     AudioPowerToggle();
     AmpPowerControl(ON);
@@ -453,12 +465,18 @@ static void Standby(uint8_t state)
     DeleteEncoderTasks();
     vTaskDelay(3000 / portTICK_PERIOD_MS);
     DigitalPowerToggle();
-    ESP_LOGI(AMP_TAG, "Stanby mode ON");
+    if (LOGI_MAIN)
+    {
+      ESP_LOGI(AMP_TAG, "Stanby mode ON");
+    }
     LcdClear();
   }
   else if (state == OFF)
   {
-    ESP_LOGI(AMP_TAG, "Waking up from Stanby mode");
+    if (LOGI_MAIN)
+    {
+      ESP_LOGI(AMP_TAG, "Waking up from Stanby mode");
+    }
     AmpAudioControl(ON);
     AmpPowerControl(OFF);
     DigitalPowerToggle();
@@ -477,6 +495,9 @@ static void Standby(uint8_t state)
     vTaskDelay(100 / portTICK_PERIOD_MS);
     DisplayInterface();
     AmpAudioControl(OFF);
-    ESP_LOGI(AMP_TAG, "Stanby mode off");
+    if (LOGI_MAIN)
+    {
+      ESP_LOGI(AMP_TAG, "Stanby mode off");
+    }
   }
 }

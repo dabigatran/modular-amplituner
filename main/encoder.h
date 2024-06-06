@@ -13,7 +13,7 @@
 
 #ifndef _encoder_parameters_H_
 #define _encoder_parameters_H_
-static const uint8_t LOGE_ENC = true;
+static const uint8_t LOGE_ENC = false;
 static const uint8_t LOGI_ENC = false;
 static char* const ENC_TAG = "Encoder";
 

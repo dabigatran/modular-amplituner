@@ -7,7 +7,7 @@
 #include "i2c.h"
 #ifndef _mcp_parameters_H_
 #define _mcp_parameters_H_
-static const uint8_t LOGE_MCP = true;
+static const uint8_t LOGE_MCP = false;
 static const uint8_t LOGI_MCP = false;
 static char* const MCP_TAG = "MCP23017";
 // Registers A

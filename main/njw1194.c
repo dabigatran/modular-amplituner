@@ -25,19 +25,18 @@ esp_err_t Njw1194Init(void)
 
 esp_err_t NjwWrite(uint8_t chipAddress, uint8_t selectAddress, uint8_t data)
 {
-	if (LOGI_NJW)
-		ESP_LOGI(NJW_TAG, "NJW1194 write.");
 	uint8_t spiData[2] = {0, 0};
 	spiData[1] = chipAddress | (selectAddress << 4);
 	spiData[0] = data;
 	esp_err_t ret = SpiWrite(2 * 8, spiData);
-	if (ret != ESP_OK)
+	if (LOGE_NJW && ret != ESP_OK)
 	{
-		if (LOGE_NJW)
-			ESP_LOGE(NJW_TAG, "NJW1194 write failed: address %02x, data %02x.", spiData[0], spiData[1]);
+		ESP_LOGE(NJW_TAG, "NJW1194 write failed: address %02x, data %02x.", spiData[0], spiData[1]);
 	}
 	else if (LOGI_NJW)
+	{
 		ESP_LOGI(NJW_TAG, "NJW1194 write OK: address %02x, data %02x.", spiData[0], spiData[1]);
+	}
 	return ret;
 }
 
