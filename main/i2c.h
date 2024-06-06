@@ -9,7 +9,8 @@
 #define MCP2_ADDRESS (uint8_t)0x25 // MCP23017 2 i2c address
 #define WRITE I2C_MASTER_WRITE     // write bit
 #define READ I2C_MASTER_READ       // read bit
-#define ACK (uint8_t)0x1           // ACK bit
+#define ACK (uint8_t)0x1           // ACK bitaaa
+
 #define NO_REG (uint8_t)0x0
 #define WITH_REG (uint8_t)0x1
 #define LOGE_I2C (uint8_t)0x1
