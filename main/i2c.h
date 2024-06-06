@@ -2,20 +2,24 @@
 #include <esp_err.h>
 #include "esp_log.h"
 #include "driver/i2c.h"
+#ifndef _i2c_parameters_H_
+#define _i2c_parameters_H_
+static const uint8_t LOGE_I2C = true; // log errors from I2C
+static const uint8_t LOGI_I2C = false; // log info from I2C 
 
-#define I2C_PORT I2C_NUM_0         // esp32 has 2 ports NUM_0/NUM_1
-#define LCD_ADDRESS (uint8_t)0x27  // lcd i2c adress
-#define MCP1_ADDRESS (uint8_t)0x26 // MCP23017 1 i2c address
-#define MCP2_ADDRESS (uint8_t)0x25 // MCP23017 2 i2c address
-#define WRITE I2C_MASTER_WRITE     // write bit
-#define READ I2C_MASTER_READ       // read bit
-#define ACK (uint8_t)0x1           // ACK bit
+static const uint8_t I2C_PORT = I2C_NUM_0; // esp32 has 2 ports NUM_0/NUM_1
+static const uint8_t LCD_ADDRESS = 0x27; // lcd i2c adress
+static const uint8_t MCP1_ADDRESS = 0x26; // MCP23017 1 i2c address
+static const uint8_t MCP2_ADDRESS = 0x25; // MCP23017 2 i2c address
+static const uint8_t WRITE = I2C_MASTER_WRITE; // write bit
+static const uint8_t READ = I2C_MASTER_READ ; // read bit
+static const uint8_t ACK = 0x1; // ACK bit        
 
-#define NO_REG (uint8_t)0x0
-#define WITH_REG (uint8_t)0x1
-#define LOGE_I2C (uint8_t)0x1
-#define LOGI_I2C (uint8_t)0x0
 
-esp_err_t I2CInit(void); // initialize i2c
+static const uint8_t NO_REG = false; // additionally send register address 
+static const uint8_t WITH_REG = true; // do ot send reigister
+
+esp_err_t I2CInit(void); 
 esp_err_t I2CWrite(uint8_t address, uint8_t size, uint8_t *data);
 esp_err_t I2CRead(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data);
+#endif

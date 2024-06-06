@@ -56,7 +56,7 @@ int8_t HdmiNibToSource(int8_t nibValue)
     return 0;
 }
 
-int8_t I2SNibToSource(int8_t nibValue)
+int8_t I2sNibToSource(int8_t nibValue)
 {
     for (int8_t i = SOURCE5; i <= SOURCE8; i++)
     {
@@ -193,7 +193,7 @@ int8_t ToggleI2S(int8_t source)
         else
             break;
     }
-    return I2SNibToSource(nib[SET]);
+    return I2sNibToSource(nib[SET]);
 }
 
 void SwitchHdmi()

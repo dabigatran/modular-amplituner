@@ -5,58 +5,60 @@
 #include <esp_err.h>
 #include "esp_log.h"
 #include "i2c.h"
+#ifndef _mcp_parameters_H_
+#define _mcp_parameters_H_
+static const uint8_t LOGE_MCP = true;
+static const uint8_t LOGI_MCP = false;
 
 // Registers A
-#define IODIRA 0x00
-#define IPOLA 0x02
-#define GPINTENA 0x04
-#define DEFVALA 0x06
-#define INTCONA 0x08
-#define IOCONA 0x0A
-#define GPPUA 0x0C
-#define INTFA 0x0E
-#define INTCAPA 0x10
-#define GPIOA 0x12
-#define OLATA 0x14
+static const char IODIRA = 0x00;
+static const char IPOLA = 0x02;
+static const char GPINTENA = 0x04;
+static const char DEFVALA = 0x06;
+static const char INTCONA = 0x08;
+static const char IOCONA = 0x0A;
+static const char GPPUA = 0x0C;
+static const char INTFA = 0x0E;
+static const char INTCAPA = 0x10;
+static const char GPIOA = 0x12;
+static const char OLATA = 0x14;
 
 // Registers B
-#define IODIRB 0x01
-#define IPOLB 0x03
-#define GPINTENB 0x05
-#define DEFVALB 0x07
-#define INTCONB 0x09
-#define IOCONB 0x0B
-#define GPPUB 0x0D
-#define INTFB 0x0F
-#define INTCAPB 0x11
-#define GPIOB 0x13
-#define OLATB 0x15
+static const char IODIRB = 0x01;
+static const char IPOLB = 0x03;
+static const char GPINTENB = 0x05;
+static const char DEFVALB = 0x07;
+static const char INTCONB = 0x09;
+static const char IOCONB = 0x0B;
+static const char GPPUB = 0x0D;
+static const char INTFB = 0x0F;
+static const char INTCAPB = 0x11;
+static const char GPIOB = 0x13;
+static const char OLATB = 0x15;
 
 // PINs GPIOA
-#define PA0 (uint8_t)0x00
-#define PA1 (uint8_t)0x01
-#define PA2 (uint8_t)0x02
-#define PA3 (uint8_t)0x03
-#define PA4 (uint8_t)0x04
-#define PA5 (uint8_t)0x05
-#define PA6 (uint8_t)0x06
-#define PA7 (uint8_t)0x07
+static const uint8_t PA0 = 0;
+static const uint8_t PA1 = 1;
+static const uint8_t PA2 = 2;
+static const uint8_t PA3 = 3;
+static const uint8_t PA4 = 4;
+static const uint8_t PA5 = 5;
+static const uint8_t PA6 = 6;
+static const uint8_t PA7 = 7;
 
 // PINs GPIOB
-#define PB0 (uint8_t)0x00
-#define PB1 (uint8_t)0x01
-#define PB2 (uint8_t)0x02
-#define PB3 (uint8_t)0x03
-#define PB4 (uint8_t)0x04
-#define PB5 (uint8_t)0x05
-#define PB6 (uint8_t)0x06
-#define PB7 (uint8_t)0x07
-
-#define LOGE_MCP (uint8_t)0x1
-#define LOGI_MCP (uint8_t)0x0
+static const uint8_t PB0 = 0;
+static const uint8_t PB1 = 1;
+static const uint8_t PB2 = 2;
+static const uint8_t PB3 = 3;
+static const uint8_t PB4 = 4;
+static const uint8_t PB5 = 5;
+static const uint8_t PB6 = 6;
+static const uint8_t PB7 = 7;
 
 esp_err_t McpInit(uint8_t address);
 esp_err_t McpWrite(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data);
 esp_err_t McpRead(uint8_t address, uint8_t reg, uint8_t *data);
 esp_err_t McpSetPin(uint8_t address, uint8_t reg, uint8_t pin);
 esp_err_t McpClearPin(uint8_t address, uint8_t reg, uint8_t pin);
+#endif

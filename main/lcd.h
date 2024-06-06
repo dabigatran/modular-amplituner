@@ -9,30 +9,33 @@
 #include "i2c.h"
 #include "string.h"
 
-#define ROWS 2
-#define COLS 16
+#ifndef _lcd_parameters_H_
+#define _lcd_parameters_H_
 
-#define SCREEN_CLEAR (char)0x01
-#define CURSOR_RETURN (char)0x02
-#define INPUT_SET (char)0x06          // Increment mode, no shift
-#define DISPLAY_SWITCH_ON (char)0x0C  // Display on, cursor off, blink off
-#define DISPLAY_SWITCH_OFF (char)0x08 // Display off, cursor off, blink off
-#define SHIFT (char)0x10              // Cursor shift, left shift
-#define FUNCTION_SET_0 (char)0x30     //(for 8bit init)b00110000 -> 8bit mode, 1 line, 5x8 characters
-#define FUNCTION_SET_1 (char)0x20     //(for 4bit init)b00100000 -> 4bit mode, 1 line, 5x8 characters
-#define FUNCTION_SET_2 (char)0x28     // b00101000 -> 4bit mode, 2 lines, 5x8 characters
-#define BACKLIGHT_ON (char)0x08       // PCF8574 P3 (bit 4=1) - sent directly via i2c_write
-#define BACKLIGHT_OFF (char)0x00      // PCF8574 P3 (bit 4=0) - sent directly via i2c_write
+static const uint8_t LOGE_LCD = true;
+static const uint8_t LOGI_LCD = false;
 
-#define LINE1 (char)0x80
-#define LINE2 (char)0xC0
-#define EN_RS_CMD1 (char)0x0C
-#define EN_RS_CMD2 (char)0x08
-#define EN_RS_DATA1 (char)0x0D
-#define EN_RS_DATA2 (char)0x09
+static const uint8_t ROWS = 2;
+static const uint8_t COLS = 16;
 
-#define LOGE_LCD (uint8_t)0x1
-#define LOGI_LCD (uint8_t)0x0
+static const char SCREEN_CLEAR = 0x01;
+static const char CURSOR_RETURN = 0x02;
+static const char INPUT_SET = 0x06; // Increment mode, no shift
+static const char DISPLAY_SWITCH_ON = 0x0C; // Display on, cursor off, blink off
+static const char DISPLAY_SWITCH_OFF = 0x08; // Display off, cursor off, blink off
+static const char SHIFT = 0x10; // Cursor shift, left shift
+static const char FUNCTION_SET_0 = 0x30; //(for 8bit init)b00110000 -> 8bit mode, 1 line, 5x8 characters
+static const char FUNCTION_SET_1 = 0x20; //(for 4bit init)b00100000 -> 4bit mode, 1 line, 5x8 characters
+static const char FUNCTION_SET_2 = 0x28; // b00101000 -> 4bit mode, 2 lines, 5x8 characters
+static const char BACKLIGHT_ON = 0x08; // PCF8574 P3 (bit 4=1) - sent directly via i2c_write
+static const char BACKLIGHT_OFF = 0x00; // PCF8574 P3 (bit 4=0) - sent directly via i2c_write
+
+static const char LINE1 = 0x80;
+static const char LINE2 = 0xC0;
+static const char EN_RS_CMD1 = 0x0C;
+static const char EN_RS_CMD2 = 0x08;
+static const char EN_RS_DATA1 = 0x0D;
+static const char EN_RS_DATA2 = 0x09;
 
 esp_err_t LcdInit(void);
 esp_err_t LcdCmd(char cmd);
@@ -45,3 +48,4 @@ esp_err_t LcdBacklightOn();
 esp_err_t LcdBacklightOff();
 uint8_t LcdPosition(uint8_t row, uint8_t col);
 void AdaptTo4bits(bool isCmd, uint8_t charIndex, char *sourceData, uint8_t dIndex, uint8_t *destData);
+#endif

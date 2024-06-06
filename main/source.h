@@ -9,44 +9,45 @@
 #include "lcd.h"
 #include "amp_parameters.h"
 #include "njw1194.h"
-
-// Number of ports
-#define HDMI_NO (uint8_t)0x04
-#define I2S_NO (uint8_t)0x04
 #define MAX_SRC_ALIAS_LENGTH 16
 #define MAX_OPT_ALIAS_LENGTH 12
 #define MAX_SOURCES 9
-#define SOURCE0 0
-#define SOURCE1 1
-#define SOURCE2 2
-#define SOURCE3 3
-#define SOURCE4 4
-#define SOURCE5 5
-#define SOURCE6 6
-#define SOURCE7 7
-#define SOURCE8 8
-#define NOT_FOUND 0
-#define FOUND 1
-#define SEARCHED 0
-#define SET 1
+
+#ifndef _source_parameters_H_
+#define _source_parameters_H_
+static const uint8_t LOGE_SRC = true;
+static const uint8_t LOGI_SRC = false;
+// Number of ports
+static const uint8_t HDMI_NO = 4;
+static const uint8_t I2S_NO = 4;
+static const uint8_t SOURCE0 = 0;
+static const uint8_t SOURCE1 = 1;
+static const uint8_t SOURCE2 = 2;
+static const uint8_t SOURCE3 = 3;
+static const uint8_t SOURCE4 = 4;
+static const uint8_t SOURCE5 = 5;
+static const uint8_t SOURCE6 = 6;
+static const uint8_t SOURCE7 = 7;
+static const uint8_t SOURCE8 = 8;
+static const uint8_t NOT_FOUND = 0;
+static const uint8_t FOUND = 1;
+static const uint8_t SEARCHED = 0;
+static const uint8_t SET = 1;
 
 /* MCP1, GPIOA values (8 bits), ALL INPUT */
-#define HDMI1 (uint8_t)0x11
-#define HDMI2 (uint8_t)0x12
-#define HDMI3 (uint8_t)0x14
-#define HDMI4 (uint8_t)0x18
-
-#define I2S1 (uint8_t)0x10
-#define I2S2 (uint8_t)0x20
-#define I2S3 (uint8_t)0x40
-#define I2S4 (uint8_t)0x80
+static const uint8_t HDMI1 = 0x11;
+static const uint8_t HDMI2 = 0x12;
+static const uint8_t HDMI3 = 0x14;
+static const uint8_t HDMI4 = 0x18;
+static const uint8_t I2S1 = 0x10;
+static const uint8_t I2S2 = 0x20;
+static const uint8_t I2S3 = 0x40;
+static const uint8_t I2S4 = 0x80;
 
 /* MCP1, GPIOB */
-#define HDMI_SWITCH PB0 // OUTPUT
-#define I2S_SWITCH PB1  // OUTPUT
+static const uint8_t HDMI_SWITCH = PB0; // OUTPUT
+static const uint8_t I2S_SWITCH = PB1; // OUTPUT
 
-#define LOGE_SRC (uint8_t)0x1
-#define LOGI_SRC (uint8_t)0x0
 void SourcesInit();
 void MapSources();
 void SetAvailibility();
@@ -59,3 +60,4 @@ int8_t HdmiNibToSource(int8_t nibValue);
 int8_t I2sNibToSource(int8_t nibValue);
 void SwitchHdmi();
 void SwitchI2s();
+#endif
