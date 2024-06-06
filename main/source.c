@@ -1,8 +1,8 @@
 #include "source.h"
 
 static const char *TAG = "Source";
-static uint8_t sources_map[MAX_SOURCES] = {NOT_FOUND};
-static uint8_t sources_available[MAX_SOURCES] = {NOT_FOUND};
+static uint8_t sourcesMap[MAX_SOURCES] = {NOT_FOUND};
+static uint8_t sourcesAvailable[MAX_SOURCES] = {NOT_FOUND};
 
 void SourcesInit()
 {
@@ -12,28 +12,28 @@ void SourcesInit()
 
 void MapSources()
 {
-    sources_map[SOURCE0] = INPUT_1;
-    sources_map[SOURCE1] = (HDMI1 & 0x0f);       // value of HDMI_nib (lo_nib)
-    sources_map[SOURCE2] = (HDMI2 & 0x0f);       // value of HDMI_nib (lo_nib)
-    sources_map[SOURCE3] = (HDMI3 & 0x0f);       // value of HDMI_nib (lo_nib)
-    sources_map[SOURCE4] = (HDMI4 & 0x0f);       // value of HDMI_nib (lo_nib)
-    sources_map[SOURCE5] = ((I2S1 >> 4) & 0x0f); // value of i2s_nib (hi_nib)
-    sources_map[SOURCE6] = ((I2S2 >> 4) & 0x0f); // value of i2s_nib (hi_nib)
-    sources_map[SOURCE7] = ((I2S3 >> 4) & 0x0f); // value of i2s_nib (hi_nib)
-    sources_map[SOURCE8] = ((I2S4 >> 4) & 0x0f); // value of i2s_nib (hi_nib)
+    sourcesMap[SOURCE0] = INPUT_1;
+    sourcesMap[SOURCE1] = (HDMI1 & 0x0f);       // value of HDMI_nib (lo_nib)
+    sourcesMap[SOURCE2] = (HDMI2 & 0x0f);       // value of HDMI_nib (lo_nib)
+    sourcesMap[SOURCE3] = (HDMI3 & 0x0f);       // value of HDMI_nib (lo_nib)
+    sourcesMap[SOURCE4] = (HDMI4 & 0x0f);       // value of HDMI_nib (lo_nib)
+    sourcesMap[SOURCE5] = ((I2S1 >> 4) & 0x0f); // value of i2s_nib (hi_nib)
+    sourcesMap[SOURCE6] = ((I2S2 >> 4) & 0x0f); // value of i2s_nib (hi_nib)
+    sourcesMap[SOURCE7] = ((I2S3 >> 4) & 0x0f); // value of i2s_nib (hi_nib)
+    sourcesMap[SOURCE8] = ((I2S4 >> 4) & 0x0f); // value of i2s_nib (hi_nib)
 }
 
 void SetAvailibility()
 {
-    sources_available[SOURCE0] = FOUND;
+    sourcesAvailable[SOURCE0] = FOUND;
     for (int8_t i = SOURCE1; i <= SOURCE4; i++)
     { // sources 1-4
         int8_t source = IsHdmiAvailable();
-        sources_available[source] = FOUND;
+        sourcesAvailable[source] = FOUND;
     }
     for (int8_t i = SOURCE6; i <= SOURCE7; i++)
     { // sources 6-7, 5 and 8 are used for hdmi and radio output
-        sources_available[i] = FOUND;
+        sourcesAvailable[i] = FOUND;
     }
 }
 
@@ -42,63 +42,63 @@ int8_t IsHdmiAvailable()
     uint8_t value = 0;
     SwitchHdmi();
     McpRead(MCP1_ADDRESS, GPIOA, &value);
-    int8_t hdmi_nib = (int8_t)value & 0x0f;
-    return HdmiNibToSource(hdmi_nib);
+    int8_t hdmiNib = (int8_t)value & 0x0f;
+    return HdmiNibToSource(hdmiNib);
 }
 
-int8_t HdmiNibToSource(int8_t nib_value)
+int8_t HdmiNibToSource(int8_t nibValue)
 {
     for (int8_t i = SOURCE1; i <= SOURCE4; i++)
     {
-        if (nib_value == sources_map[i])
+        if (nibValue == sourcesMap[i])
             return i;
     }
     return 0;
 }
 
-int8_t I2SNibToSource(int8_t nib_value)
+int8_t I2SNibToSource(int8_t nibValue)
 {
     for (int8_t i = SOURCE5; i <= SOURCE8; i++)
     {
-        if (nib_value == sources_map[i])
+        if (nibValue == sourcesMap[i])
             return i;
     }
     return 0;
 }
 
-void SetSource(int8_t (*tuner_state)[VAR_NO])
+void SetSource(int8_t (*tunerState)[VAR_NO])
 {
     /*
         Checking if source is available. If not-> select next  or previous depending
         on toogle direction.
     */
-    while (!sources_available[tuner_state[SOURCE][ACT_VAL]])
+    while (!sourcesAvailable[tunerState[SOURCE][ACT_VAL]])
     {
-        if (tuner_state[SOURCE][LAS_VAL] <= tuner_state[SOURCE][ACT_VAL])
+        if (tunerState[SOURCE][LAS_VAL] <= tunerState[SOURCE][ACT_VAL])
         {
-            tuner_state[SOURCE][LAS_VAL] = tuner_state[SOURCE][ACT_VAL];
-            tuner_state[SOURCE][ACT_VAL]++;
+            tunerState[SOURCE][LAS_VAL] = tunerState[SOURCE][ACT_VAL];
+            tunerState[SOURCE][ACT_VAL]++;
         }
         else
         {
-            tuner_state[SOURCE][LAS_VAL] = tuner_state[SOURCE][ACT_VAL];
-            tuner_state[SOURCE][ACT_VAL]--;
+            tunerState[SOURCE][LAS_VAL] = tunerState[SOURCE][ACT_VAL];
+            tunerState[SOURCE][ACT_VAL]--;
         }
-        if (tuner_state[SOURCE][ACT_VAL] < SOURCE0)
+        if (tunerState[SOURCE][ACT_VAL] < SOURCE0)
         {
-            tuner_state[SOURCE][ACT_VAL] = MAX_SOURCES - 1;
-            tuner_state[SOURCE][LAS_VAL] = MAX_SOURCES - 1;
+            tunerState[SOURCE][ACT_VAL] = MAX_SOURCES - 1;
+            tunerState[SOURCE][LAS_VAL] = MAX_SOURCES - 1;
         }
-        if (tuner_state[SOURCE][ACT_VAL] >= MAX_SOURCES)
+        if (tunerState[SOURCE][ACT_VAL] >= MAX_SOURCES)
         {
-            tuner_state[SOURCE][ACT_VAL] = SOURCE0;
-            tuner_state[SOURCE][LAS_VAL] = SOURCE0;
+            tunerState[SOURCE][ACT_VAL] = SOURCE0;
+            tunerState[SOURCE][LAS_VAL] = SOURCE0;
         }
     }
     /*Change to available source*/
-    int8_t change_response = ChangeSource(tuner_state[SOURCE][ACT_VAL]);
-    if (change_response != tuner_state[SOURCE][ACT_VAL])
-        tuner_state[SOURCE][ACT_VAL] = change_response;
+    int8_t changeResponse = ChangeSource(tunerState[SOURCE][ACT_VAL]);
+    if (changeResponse != tunerState[SOURCE][ACT_VAL])
+        tunerState[SOURCE][ACT_VAL] = changeResponse;
 }
 
 int8_t ChangeSource(int8_t source)
@@ -136,7 +136,7 @@ int8_t ChangeSource(int8_t source)
 int8_t ToggleHdmi(int8_t source)
 {
     // nib[0]->searched(selected) source, nib[1]->set source (read from hdmi module)
-    int8_t nib[2] = {sources_map[source], 0};
+    int8_t nib[2] = {sourcesMap[source], 0};
     uint8_t value = 0;
     int8_t success = false;
     for (int i = 0; i < HDMI_NO; i++)
@@ -148,9 +148,9 @@ int8_t ToggleHdmi(int8_t source)
 
         // new device plugged during operation (was not on available map)
         // add this device to availbility map and set source to the device
-        if (!sources_available[HdmiNibToSource(nib[SET])])
+        if (!sourcesAvailable[HdmiNibToSource(nib[SET])])
         {
-            sources_available[HdmiNibToSource(nib[SET])] = FOUND;
+            sourcesAvailable[HdmiNibToSource(nib[SET])] = FOUND;
             success = true;
             break;
         }
@@ -170,7 +170,7 @@ int8_t ToggleHdmi(int8_t source)
     {
         // not found, although on available map (probably unplugged during operation)
         // remove from availibility map
-        sources_available[HdmiNibToSource(nib[SEARCHED])] = NOT_FOUND;
+        sourcesAvailable[HdmiNibToSource(nib[SEARCHED])] = NOT_FOUND;
         return NOT_FOUND;
     }
 }
@@ -178,7 +178,7 @@ int8_t ToggleHdmi(int8_t source)
 int8_t ToggleI2S(int8_t source)
 {
     // nib[0]->searched (selected) source, nib[1]->set source (read from i2s module)
-    int8_t nib[2] = {sources_map[source], 0};
+    int8_t nib[2] = {sourcesMap[source], 0};
     uint8_t value = 0;
     for (int i = 0; i < I2S_NO; i++)
     {

@@ -42,11 +42,11 @@
 #define LOGE_ENC (uint8_t)0x1
 #define LOGI_ENC (uint8_t)0x0
 
-int8_t CreateSnapshot(int8_t (*tuner_state)[VAR_NO], uint8_t *interrupt_data);
-int8_t CheckInterrupt(int8_t (*tuner_state)[VAR_NO]);
-int8_t CheckOverflow(int8_t (*tuner_state)[VAR_NO], int8_t select);
-int8_t DecodePins(uint8_t *snapshot, int8_t (*tuner_state)[VAR_NO]);
-int8_t OptionControl(uint8_t *snapshot, int8_t (*tuner_state)[VAR_NO], int8_t option);
-int8_t ButtonControl(int8_t (*tuner_state)[VAR_NO], int8_t option);
-int8_t Mute(int8_t (*tuner_state)[VAR_NO], int8_t option);
-int8_t Toggle(int8_t (*tuner_state)[VAR_NO], int8_t option);
+int8_t CreateSnapshot(int8_t (*tunerState)[VAR_NO], uint8_t *interruptData);
+int8_t CheckInterrupt(int8_t (*tunerState)[VAR_NO]);
+int8_t CheckOverflow(int8_t (*tunerState)[VAR_NO], int8_t select);
+int8_t DecodePins(uint8_t *snapshot, int8_t (*tunerState)[VAR_NO]);
+int8_t OptionControl(uint8_t *snapshot, int8_t (*tunerState)[VAR_NO], int8_t option);
+int8_t ButtonControl(int8_t (*tunerState)[VAR_NO], int8_t option);
+int8_t Mute(int8_t (*tunerState)[VAR_NO], int8_t option);
+int8_t Toggle(int8_t (*tunerState)[VAR_NO], int8_t option);

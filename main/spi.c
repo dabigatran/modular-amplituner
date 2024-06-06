@@ -2,18 +2,18 @@
 
 static const char *TAG = "SPI";
 #define SENDER_HOST HSPI_HOST
-spi_device_handle_t spi_handle;
+spi_device_handle_t spiHandle;
 
 esp_err_t SpiInit(void)
 {
-   spi_bus_config_t bus_config = {
+   spi_bus_config_t busConfig = {
        .miso_io_num = -1,
        .mosi_io_num = GPIO_MOSI,
        .sclk_io_num = GPIO_CLK,
        .quadwp_io_num = -1,
        .quadhd_io_num = -1,
        .max_transfer_sz = 10};
-   esp_err_t ret = spi_bus_initialize(SENDER_HOST, &bus_config, SPI_DMA_CH_AUTO);
+   esp_err_t ret = spi_bus_initialize(SENDER_HOST, &busConfig, SPI_DMA_CH_AUTO);
    if (ret != ESP_OK)
    {
       ESP_LOGE(TAG, "Unable to init spi.");
@@ -25,7 +25,7 @@ esp_err_t SpiInit(void)
 
 esp_err_t SpiInit2(void)
 {
-   spi_bus_config_t bus_config = {
+   spi_bus_config_t busConfig = {
        .miso_io_num = -1,
        .mosi_io_num = GPIO_MOSI,
        .sclk_io_num = GPIO_CLK,
@@ -33,7 +33,7 @@ esp_err_t SpiInit2(void)
        .quadhd_io_num = -1,
        .max_transfer_sz = 10};
 
-   spi_device_interface_config_t njw1194_config = {
+   spi_device_interface_config_t njw1194Config = {
        .command_bits = 0,
        .address_bits = 0,
        .dummy_bits = 0,
@@ -46,14 +46,14 @@ esp_err_t SpiInit2(void)
        .queue_size = 10,
    };
 
-   esp_err_t ret = spi_bus_initialize(SENDER_HOST, &bus_config, SPI_DMA_CH_AUTO);
+   esp_err_t ret = spi_bus_initialize(SENDER_HOST, &busConfig, SPI_DMA_CH_AUTO);
    if (ret != ESP_OK)
    {
       ESP_LOGE(TAG, "Unable to init spi.");
       ESP_LOGE(TAG, "Description: %s", esp_err_to_name(ret));
       return ret;
    }
-   ret = spi_bus_add_device(SENDER_HOST, &njw1194_config, &spi_handle);
+   ret = spi_bus_add_device(SENDER_HOST, &njw1194Config, &spiHandle);
    if (ret != ESP_OK)
    {
       ESP_LOGE(TAG, "Unable to add njw1194.");
@@ -66,7 +66,7 @@ esp_err_t SpiInit2(void)
 
 esp_err_t SpiBusAddNjw1194(void)
 {
-   spi_device_interface_config_t njw1194_config = {
+   spi_device_interface_config_t njw1194Config = {
        .command_bits = 0,
        .address_bits = 0,
        .dummy_bits = 0,
@@ -78,7 +78,7 @@ esp_err_t SpiBusAddNjw1194(void)
        .cs_ena_posttrans = 1,
        .queue_size = 10,
    };
-   esp_err_t ret = spi_bus_add_device(SENDER_HOST, &njw1194_config, &spi_handle);
+   esp_err_t ret = spi_bus_add_device(SENDER_HOST, &njw1194Config, &spiHandle);
    if (ret != ESP_OK)
    {
       ESP_LOGE(TAG, "Unable to add njw1194 to spi bus.");
@@ -91,7 +91,7 @@ esp_err_t SpiBusAddNjw1194(void)
 
 esp_err_t SpiBusRemoveNjw1194(void)
 {
-   esp_err_t ret = spi_bus_remove_device(spi_handle);
+   esp_err_t ret = spi_bus_remove_device(spiHandle);
    if (ret != ESP_OK)
    {
       ESP_LOGE(TAG, "Unable to remove njw1194 from spi bus.");
@@ -109,7 +109,7 @@ esp_err_t SpiWrite(size_t size, uint8_t *data)
    t.length = size;
    t.rxlength = 0;
    t.tx_buffer = data;
-   esp_err_t ret = spi_device_transmit(spi_handle, &t);
+   esp_err_t ret = spi_device_transmit(spiHandle, &t);
    if (ret == ESP_FAIL)
    {
       if (LOGE_SPI)

@@ -45,8 +45,8 @@
 #define LOGI_NJW 0x00
 
 esp_err_t Njw1194Init(void);
-esp_err_t NjwWrite(uint8_t chip_address, uint8_t select_address, uint8_t data);
+esp_err_t NjwWrite(uint8_t chipAddress, uint8_t selectAddress, uint8_t data);
 void SetAnalogInput(int8_t input);
-void SetTone(int8_t state, uint8_t tone_type, int8_t tone_value);
+void SetTone(int8_t state, uint8_t toneType, int8_t toneValue);
 void SetToneCtrl(int8_t state, int8_t treble, int8_t bass);
 void SetVolume(int8_t volume, int8_t balance);

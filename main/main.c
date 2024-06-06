@@ -17,17 +17,17 @@
 #include "remote.h"
 
 static const char *TAG = "AmpliTuner";
-static SemaphoreHandle_t encoder_interrupt_semaphore = NULL;
-static SemaphoreHandle_t standby_interrupt_semaphore = NULL;
-static TaskHandle_t encoder_get_task = NULL;
-static TaskHandle_t encoder_set_task = NULL;
-static TaskHandle_t encoder_interrupt_clear_task = NULL;
-static TaskHandle_t remote_get_task = NULL;
-static TaskHandle_t remote_set_task = NULL;
-static QueueHandle_t encoder_queue = NULL;
-static QueueHandle_t remote_queue = NULL;
-static bool standby_mode = ON;
-static int8_t tuner_state[OPTION_NO][VAR_NO] = {
+static SemaphoreHandle_t encoderInterruptSemaphore = NULL;
+static SemaphoreHandle_t standbyInterruptSemaphore = NULL;
+static TaskHandle_t encoderGetTask = NULL;
+static TaskHandle_t encoderSetTask = NULL;
+static TaskHandle_t encoderInterruptClearTask = NULL;
+static TaskHandle_t remoteGetTask = NULL;
+static TaskHandle_t remoteSetTask = NULL;
+static QueueHandle_t encoderQueue = NULL;
+static QueueHandle_t remoteQueue = NULL;
+static bool standbyMode = ON;
+static int8_t tunerState[OPTION_NO][VAR_NO] = {
     {0, 0, VOL_MIN, VOL_MAX, OVFL_NO},
     {SEL_MIN, 0, SEL_MIN, SEL_MAX, OVFL_YES},
     {0, 0, SRC_MIN, SRC_MAX, OVFL_YES},
@@ -35,9 +35,9 @@ static int8_t tuner_state[OPTION_NO][VAR_NO] = {
     {0, 0, TRE_MIN, TRE_MAX, OVFL_NO},
     {0, 0, BAS_MIN, BAS_MAX, OVFL_NO},
     {0, 0, TON_MIN, TON_MAX, OVFL_NO}};
-static char source_alias[MAX_SOURCES][MAX_SRC_ALIAS_LENGTH] = {
+static char sourceAlias[MAX_SOURCES][MAX_SRC_ALIAS_LENGTH] = {
     {"Analog"}, {"HDMI1"}, {"HDMI2"}, {"HDMI3"}, {"HDMI4"}, {"\0"}, {"Spdif"}, {"Bluetooth"}, {"\0"}};
-static char option_alias[OPTION_NO][MAX_OPT_ALIAS_LENGTH] = {
+static char optionAlias[OPTION_NO][MAX_OPT_ALIAS_LENGTH] = {
     {"Volume"}, {"Selected"}, {"Source"}, {"Balance"}, {"Treble"}, {"Bass"}, {"Tone switch"}};
 
 static void Initialize(void);
@@ -54,7 +54,7 @@ static void EncoderSetLoop();
 static void EncoderInterruptClearLoop();
 static void RemoteGetLoop();
 static void RemoteSetLoop();
-static void SetChange(int8_t last_change);
+static void SetChange(int8_t lastChange);
 static void AudioPowerToggle(void);
 static void DigitalPowerToggle(void);
 static void AmpAudioControl(uint8_t state);
@@ -71,7 +71,7 @@ void app_main(void)
   Initialize();
   while (1)
   {
-    if (xSemaphoreTake(standby_interrupt_semaphore, 3000) == pdPASS)
+    if (xSemaphoreTake(standbyInterruptSemaphore, 3000) == pdPASS)
     {
       uint8_t counter = 0;
       while (gpio_get_level(STANDBY_BUTTON_GPIO) == 0)
@@ -80,8 +80,8 @@ void app_main(void)
         vTaskDelay(100 / portTICK_PERIOD_MS);
         if (counter > 4)
         {
-          standby_mode = !standby_mode;
-          Standby(standby_mode);
+          standbyMode = !standbyMode;
+          Standby(standbyMode);
           break;
         }
       }
@@ -110,44 +110,44 @@ static void Initialize(void)
   SetupAudioDefaults();
   SetupRemoteTasks();
   BlinkLed(ON);
-  ESP_LOGI(TAG, "Init finished. standby: %d", standby_mode);
-  standby_interrupt_semaphore = xSemaphoreCreateBinary();
+  ESP_LOGI(TAG, "Init finished. standby: %d", standbyMode);
+  standbyInterruptSemaphore = xSemaphoreCreateBinary();
 }
 
 static void SetupEncoderTasks(void)
 {
-  encoder_interrupt_semaphore = xSemaphoreCreateBinary();
-  encoder_queue = xQueueCreate(ENC_QUEUE_LENGTH, ENCODER_DATA);
-  xTaskCreatePinnedToCore(EncoderGetLoop, "EncoderGetLoop", 2048, NULL, 6, &encoder_get_task, 0);
-  xTaskCreatePinnedToCore(EncoderSetLoop, "EncoderSetLoop", 4096, NULL, 5, &encoder_set_task, 1);
-  xTaskCreatePinnedToCore(EncoderInterruptClearLoop, "EncoderInterruptClearLoopp", 2048, NULL, 1, &encoder_interrupt_clear_task, 1);
+  encoderInterruptSemaphore = xSemaphoreCreateBinary();
+  encoderQueue = xQueueCreate(ENC_QUEUE_LENGTH, ENCODER_DATA);
+  xTaskCreatePinnedToCore(EncoderGetLoop, "EncoderGetLoop", 2048, NULL, 6, &encoderGetTask, 0);
+  xTaskCreatePinnedToCore(EncoderSetLoop, "EncoderSetLoop", 4096, NULL, 5, &encoderSetTask, 1);
+  xTaskCreatePinnedToCore(EncoderInterruptClearLoop, "EncoderInterruptClearLoopp", 2048, NULL, 1, &encoderInterruptClearTask, 1);
 }
 
 static void SetupRemoteTasks(void)
 {
-  xTaskCreatePinnedToCore(RemoteGetLoop, "RemoteGetLoop", 4096, NULL, 4, &remote_get_task, 0);
-  xTaskCreatePinnedToCore(RemoteSetLoop, "RemoteSetLoop", 2048, NULL, 3, &remote_set_task, 1);
+  xTaskCreatePinnedToCore(RemoteGetLoop, "RemoteGetLoop", 4096, NULL, 4, &remoteGetTask, 0);
+  xTaskCreatePinnedToCore(RemoteSetLoop, "RemoteSetLoop", 2048, NULL, 3, &remoteSetTask, 1);
 }
 
 static void DeleteEncoderTasks(void)
 {
-  encoder_interrupt_semaphore = NULL;
-  encoder_queue = NULL;
-  vTaskDelete(encoder_get_task);
-  vTaskDelete(encoder_set_task);
-  vTaskDelete(encoder_interrupt_clear_task);
+  encoderInterruptSemaphore = NULL;
+  encoderQueue = NULL;
+  vTaskDelete(encoderGetTask);
+  vTaskDelete(encoderSetTask);
+  vTaskDelete(encoderInterruptClearTask);
 }
 
 static void IRAM_ATTR EncoderGetLoop()
 {
   while (1)
   {
-    if (xSemaphoreTake(encoder_interrupt_semaphore, PORT_DELAY) == pdPASS)
+    if (xSemaphoreTake(encoderInterruptSemaphore, PORT_DELAY) == pdPASS)
     {
-      uint8_t interrupt_data[2] = {0};
-      McpRead(MCP1_ADDRESS, INTFB, &interrupt_data[0]);
-      McpRead(MCP1_ADDRESS, INTCAPB, &interrupt_data[1]);
-      xQueueSend(encoder_queue, &interrupt_data, PORT_DELAY);
+      uint8_t interruptData[2] = {0};
+      McpRead(MCP1_ADDRESS, INTFB, &interruptData[0]);
+      McpRead(MCP1_ADDRESS, INTCAPB, &interruptData[1]);
+      xQueueSend(encoderQueue, &interruptData, PORT_DELAY);
     }
   }
 }
@@ -156,10 +156,10 @@ static void IRAM_ATTR EncoderSetLoop()
 {
   while (1)
   {
-    uint8_t interrupt_data[2] = {0};
-    xQueueReceive(encoder_queue, &interrupt_data, PORT_DELAY);
-    int8_t last_change = CreateSnapshot(tuner_state, interrupt_data);
-    SetChange(last_change);
+    uint8_t interruptData[2] = {0};
+    xQueueReceive(encoderQueue, &interruptData, PORT_DELAY);
+    int8_t lastChange = CreateSnapshot(tunerState, interruptData);
+    SetChange(lastChange);
   }
 }
 
@@ -173,10 +173,10 @@ static void IRAM_ATTR EncoderInterruptClearLoop()
       count++;
       if (count == 3)
       {
-        uint8_t interrupt_data[2] = {0};
-        McpRead(MCP1_ADDRESS, INTFB, &interrupt_data[0]);
-        McpRead(MCP1_ADDRESS, INTCAPB, &interrupt_data[1]);
-        xQueueSend(encoder_queue, &interrupt_data, PORT_DELAY);
+        uint8_t interruptData[2] = {0};
+        McpRead(MCP1_ADDRESS, INTFB, &interruptData[0]);
+        McpRead(MCP1_ADDRESS, INTCAPB, &interruptData[1]);
+        xQueueSend(encoderQueue, &interruptData, PORT_DELAY);
         count = 0;
       }
       vTaskDelay(10 / portTICK_PERIOD_MS);
@@ -192,40 +192,40 @@ static void IRAM_ATTR EncoderInterruptClearLoop()
 
 static void IRAM_ATTR RemoteGetLoop()
 {
-  remote_queue = xQueueCreate(RMT_QUEUE_LENGTH, REMOTE_DATA);
+  remoteQueue = xQueueCreate(RMT_QUEUE_LENGTH, REMOTE_DATA);
   ESP_LOGI(TAG, "create RMT RX channel");
-  rmt_rx_channel_config_t rx_channel_cfg = {
+  rmt_rx_channel_config_t rxChannelCfg = {
       .clk_src = RMT_CLK_SRC_DEFAULT,
       .resolution_hz = IR_RESOLUTION_HZ,
       .mem_block_symbols = 64,
       .gpio_num = IR_RX_GPIO_NUM,
   };
-  rmt_channel_handle_t rx_channel = NULL;
-  ESP_ERROR_CHECK(rmt_new_rx_channel(&rx_channel_cfg, &rx_channel));
+  rmt_channel_handle_t rxChannel = NULL;
+  ESP_ERROR_CHECK(rmt_new_rx_channel(&rxChannelCfg, &rxChannel));
 
   ESP_LOGI(TAG, "register RX done callback");
-  QueueHandle_t receive_queue = xQueueCreate(1, sizeof(rmt_rx_done_event_data_t));
-  assert(receive_queue);
+  QueueHandle_t receiveQueue = xQueueCreate(1, sizeof(rmt_rx_done_event_data_t));
+  assert(receiveQueue);
   rmt_rx_event_callbacks_t cbs = {
       .on_recv_done = RmtRxDoneCallback,
   };
-  ESP_ERROR_CHECK(rmt_rx_register_event_callbacks(rx_channel, &cbs, receive_queue));
+  ESP_ERROR_CHECK(rmt_rx_register_event_callbacks(rxChannel, &cbs, receiveQueue));
 
-  rmt_receive_config_t receive_config = {
+  rmt_receive_config_t receiveConfig = {
       .signal_range_min_ns = 1250,
       .signal_range_max_ns = 12000000,
   };
 
-  ESP_ERROR_CHECK(rmt_enable(rx_channel));
-  rmt_symbol_word_t raw_symbols[64];
-  rmt_rx_done_event_data_t rx_data;
-  ESP_ERROR_CHECK(rmt_receive(rx_channel, raw_symbols, sizeof(raw_symbols), &receive_config));
+  ESP_ERROR_CHECK(rmt_enable(rxChannel));
+  rmt_symbol_word_t rawSymbols[64];
+  rmt_rx_done_event_data_t rxData;
+  ESP_ERROR_CHECK(rmt_receive(rxChannel, rawSymbols, sizeof(rawSymbols),&receiveConfig));
   while (1)
   {
-    if (xQueueReceive(receive_queue, &rx_data, pdMS_TO_TICKS(1000)) == pdPASS)
+    if (xQueueReceive(receiveQueue, &rxData, pdMS_TO_TICKS(1000)) == pdPASS)
     {
-      ParseFrame(rx_data.received_symbols, rx_data.num_symbols, remote_queue);
-      ESP_ERROR_CHECK(rmt_receive(rx_channel, raw_symbols, sizeof(raw_symbols), &receive_config));
+      ParseFrame(rxData.received_symbols, rxData.num_symbols, remoteQueue);
+      ESP_ERROR_CHECK(rmt_receive(rxChannel, rawSymbols, sizeof(rawSymbols), &receiveConfig));
     }
   }
 }
@@ -234,32 +234,32 @@ static void IRAM_ATTR RemoteSetLoop()
 {
   while (1)
   {
-    int8_t last_change = RemoteParse(tuner_state, remote_queue);
-    SetChange(last_change);
+    int8_t lastChange = RemoteParse(tunerState, remoteQueue);
+    SetChange(lastChange);
   }
 }
 
 static void EncoderInterruptHandler(void *args)
 {
   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-  xSemaphoreGiveFromISR(encoder_interrupt_semaphore, &xHigherPriorityTaskWoken);
+  xSemaphoreGiveFromISR(encoderInterruptSemaphore, &xHigherPriorityTaskWoken);
 }
 
 static void StandbyInterruptHandler(void *args)
 {
   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-  xSemaphoreGiveFromISR(standby_interrupt_semaphore, &xHigherPriorityTaskWoken);
+  xSemaphoreGiveFromISR(standbyInterruptSemaphore, &xHigherPriorityTaskWoken);
 }
 
 static void EncoderIsrHandlerAdd(void)
 {
-  gpio_config_t io_conf;
-  io_conf.intr_type = GPIO_INTR_NEGEDGE;
-  io_conf.pin_bit_mask = (1 << INTR_PIN);
-  io_conf.mode = GPIO_MODE_INPUT;
-  io_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
-  io_conf.pull_up_en = GPIO_PULLUP_ENABLE;
-  gpio_config(&io_conf);
+  gpio_config_t ioConf;
+  ioConf.intr_type = GPIO_INTR_NEGEDGE;
+  ioConf.pin_bit_mask = (1 << INTR_PIN);
+  ioConf.mode = GPIO_MODE_INPUT;
+  ioConf.pull_down_en = GPIO_PULLDOWN_DISABLE;
+  ioConf.pull_up_en = GPIO_PULLUP_ENABLE;
+  gpio_config(&ioConf);
   esp_err_t ret = gpio_isr_handler_add(INTR_PIN, EncoderInterruptHandler, NULL);
   if (ret != ESP_OK)
   {
@@ -290,13 +290,13 @@ static void EncoderIsrHandlerRemove(void)
 
 static void StandbyIsrHandlerAdd(void)
 {
-  gpio_config_t io_conf;
-  io_conf.intr_type = GPIO_INTR_NEGEDGE;
-  io_conf.pin_bit_mask = (1ULL << STANDBY_BUTTON_GPIO);
-  io_conf.mode = GPIO_MODE_INPUT;
-  io_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
-  io_conf.pull_up_en = GPIO_PULLUP_ENABLE;
-  gpio_config(&io_conf);
+  gpio_config_t ioConf;
+  ioConf.intr_type = GPIO_INTR_NEGEDGE;
+  ioConf.pin_bit_mask = (1ULL << STANDBY_BUTTON_GPIO);
+  ioConf.mode = GPIO_MODE_INPUT;
+  ioConf.pull_down_en = GPIO_PULLDOWN_DISABLE;
+  ioConf.pull_up_en = GPIO_PULLUP_ENABLE;
+  gpio_config(&ioConf);
   esp_err_t ret = gpio_isr_handler_add(STANDBY_BUTTON_GPIO, StandbyInterruptHandler, NULL);
   if (ret != ESP_OK)
   {
@@ -320,18 +320,18 @@ static void DisplayInterface(void)
 {
   LcdClear();
   SetChange(SOURCE);
-  LcdText(0, 0, option_alias[VOLUME]);
+  LcdText(0, 0, optionAlias[VOLUME]);
   SetChange(VOLUME);
 }
 
 static void SetupAudioDefaults(void)
 {
-  tuner_state[VOLUME][ACT_VAL] = 17;
-  tuner_state[SOURCE][ACT_VAL] = 5;
-  tuner_state[BALANCE][ACT_VAL] = 0;
-  tuner_state[TREBLE][ACT_VAL] = 0;
-  tuner_state[BASS][ACT_VAL] = 0;
-  tuner_state[TONE_SW][ACT_VAL] = 0;
+  tunerState[VOLUME][ACT_VAL] = 17;
+  tunerState[SOURCE][ACT_VAL] = 5;
+  tunerState[BALANCE][ACT_VAL] = 0;
+  tunerState[TREBLE][ACT_VAL] = 0;
+  tunerState[BASS][ACT_VAL] = 0;
+  tunerState[TONE_SW][ACT_VAL] = 0;
 }
 
 static void BlinkLed(uint8_t state)
@@ -376,46 +376,46 @@ static void AmpPowerControl(uint8_t state)
   gpio_set_level(AMP_POWER_CONTROL_GPIO, state);
 }
 
-static void IRAM_ATTR SetChange(int8_t last_change)
+static void IRAM_ATTR SetChange(int8_t lastChange)
 {
   char buffer[17];
-  switch (last_change)
+  switch (lastChange)
   {
   case SOURCE:
-    SetVolume(tuner_state[VOLUME][MIN_VAL], tuner_state[BALANCE][ACT_VAL]);
-    SetSource(tuner_state);
-    sprintf(buffer, "%s", source_alias[tuner_state[SOURCE][ACT_VAL]]);
+    SetVolume(tunerState[VOLUME][MIN_VAL], tunerState[BALANCE][ACT_VAL]);
+    SetSource(tunerState);
+    sprintf(buffer, "%s", sourceAlias[tunerState[SOURCE][ACT_VAL]]);
     LcdClearLine(1);
     LcdText(1, 0, buffer);
-    SetVolume(tuner_state[VOLUME][ACT_VAL], tuner_state[BALANCE][ACT_VAL]);
+    SetVolume(tunerState[VOLUME][ACT_VAL], tunerState[BALANCE][ACT_VAL]);
     break;
   case VOLUME:
-    SetVolume(tuner_state[VOLUME][ACT_VAL], tuner_state[BALANCE][ACT_VAL]);
-    sprintf(buffer, "%2d", tuner_state[VOLUME][ACT_VAL]);
+    SetVolume(tunerState[VOLUME][ACT_VAL], tunerState[BALANCE][ACT_VAL]);
+    sprintf(buffer, "%2d", tunerState[VOLUME][ACT_VAL]);
     LcdText(0, 7, buffer);
     break;
   case STANDBY:
-    standby_mode = !standby_mode;
-    Standby(standby_mode);
+    standbyMode = !standbyMode;
+    Standby(standbyMode);
     break;
   case BALANCE:
-    SetVolume(tuner_state[VOLUME][ACT_VAL], tuner_state[BALANCE][ACT_VAL]);
-    sprintf(buffer, "%3d", tuner_state[BALANCE][ACT_VAL]);
+    SetVolume(tunerState[VOLUME][ACT_VAL], tunerState[BALANCE][ACT_VAL]);
+    sprintf(buffer, "%3d", tunerState[BALANCE][ACT_VAL]);
     LcdText(1, 8, buffer);
     break;
   case TREBLE:
-    SetTone(tuner_state[TONE_SW][ACT_VAL], TREBLE_CTRL, tuner_state[TREBLE][ACT_VAL]);
-    sprintf(buffer, "%3d", tuner_state[TREBLE][ACT_VAL]);
+    SetTone(tunerState[TONE_SW][ACT_VAL], TREBLE_CTRL, tunerState[TREBLE][ACT_VAL]);
+    sprintf(buffer, "%3d", tunerState[TREBLE][ACT_VAL]);
     LcdText(1, 7, buffer);
     break;
   case BASS:
-    SetTone(tuner_state[TONE_SW][ACT_VAL], BASS_CTRL, tuner_state[BASS][ACT_VAL]);
-    sprintf(buffer, "%3d", tuner_state[BASS][ACT_VAL]);
+    SetTone(tunerState[TONE_SW][ACT_VAL], BASS_CTRL, tunerState[BASS][ACT_VAL]);
+    sprintf(buffer, "%3d", tunerState[BASS][ACT_VAL]);
     LcdText(1, 5, buffer);
     break;
   case TONE_SW:
-    SetTone(tuner_state[TONE_SW][ACT_VAL], TREBLE_CTRL, tuner_state[TREBLE][ACT_VAL]);
-    if (tuner_state[TONE_SW][ACT_VAL] == 1)
+    SetTone(tunerState[TONE_SW][ACT_VAL], TREBLE_CTRL, tunerState[TREBLE][ACT_VAL]);
+    if (tunerState[TONE_SW][ACT_VAL] == 1)
       sprintf(buffer, "%s", "ON ");
     else
       sprintf(buffer, "%s", "OFF");
@@ -423,14 +423,14 @@ static void IRAM_ATTR SetChange(int8_t last_change)
     break;
   case SELECTED:
     LcdClearLine(1);
-    if (tuner_state[SELECTED][ACT_VAL] == SOURCE)
-      sprintf(buffer, "%s", source_alias[tuner_state[SOURCE][ACT_VAL]]);
-    else if (tuner_state[SELECTED][ACT_VAL] == TONE_SW && tuner_state[TONE_SW][ACT_VAL] == 1)
-      sprintf(buffer, "%s %s", option_alias[tuner_state[SELECTED][ACT_VAL]], "ON");
-    else if (tuner_state[SELECTED][ACT_VAL] == TONE_SW && tuner_state[TONE_SW][ACT_VAL] == 0)
-      sprintf(buffer, "%s %s", option_alias[tuner_state[SELECTED][ACT_VAL]], "OFF");
+    if (tunerState[SELECTED][ACT_VAL] == SOURCE)
+      sprintf(buffer, "%s", sourceAlias[tunerState[SOURCE][ACT_VAL]]);
+    else if (tunerState[SELECTED][ACT_VAL] == TONE_SW && tunerState[TONE_SW][ACT_VAL] == 1)
+      sprintf(buffer, "%s %s", optionAlias[tunerState[SELECTED][ACT_VAL]], "ON");
+    else if (tunerState[SELECTED][ACT_VAL] == TONE_SW && tunerState[TONE_SW][ACT_VAL] == 0)
+      sprintf(buffer, "%s %s", optionAlias[tunerState[SELECTED][ACT_VAL]], "OFF");
     else
-      sprintf(buffer, "%s %3d", option_alias[tuner_state[SELECTED][ACT_VAL]], tuner_state[tuner_state[SELECTED][ACT_VAL]][ACT_VAL]);
+      sprintf(buffer, "%s %3d", optionAlias[tunerState[SELECTED][ACT_VAL]], tunerState[tunerState[SELECTED][ACT_VAL]][ACT_VAL]);
     LcdText(1, 0, buffer);
   }
 }
@@ -446,7 +446,7 @@ static void Standby(uint8_t state)
     LcdClear();
     LcdText(0, 0, "   going into");
     LcdText(1, 0, "  Standby mode");
-    SetVolume(tuner_state[VOLUME][MIN_VAL], tuner_state[BALANCE][ACT_VAL]);
+    SetVolume(tunerState[VOLUME][MIN_VAL], tunerState[BALANCE][ACT_VAL]);
     SetAnalogInput(INPUT_MUTE);
     EncoderIsrHandlerRemove();
     SpiBusRemoveNjw1194();
@@ -470,10 +470,10 @@ static void Standby(uint8_t state)
     EncoderIsrHandlerAdd();
     SpiBusAddNjw1194();
     SourcesInit();
-    SetTone(tuner_state[TONE_SW][ACT_VAL], TREBLE_CTRL, tuner_state[TREBLE][ACT_VAL]);
-    SetTone(tuner_state[TONE_SW][ACT_VAL], BASS_CTRL, tuner_state[BASS][ACT_VAL]);
-    SetSource(tuner_state);
-    SetVolume(tuner_state[VOLUME][ACT_VAL], tuner_state[BALANCE][ACT_VAL]);
+    SetTone(tunerState[TONE_SW][ACT_VAL], TREBLE_CTRL, tunerState[TREBLE][ACT_VAL]);
+    SetTone(tunerState[TONE_SW][ACT_VAL], BASS_CTRL, tunerState[BASS][ACT_VAL]);
+    SetSource(tunerState);
+    SetVolume(tunerState[VOLUME][ACT_VAL], tunerState[BALANCE][ACT_VAL]);
     vTaskDelay(100 / portTICK_PERIOD_MS);
     DisplayInterface();
     AmpAudioControl(OFF);

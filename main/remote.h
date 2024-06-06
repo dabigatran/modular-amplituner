@@ -33,10 +33,10 @@
 #define CHROMECAST_VOLUME_DOWN (uint16_t)0xE41B
 #define CHROMECAST_MUTE_UNMUTE (uint16_t)0xE31C
 
-bool RmtRxDoneCallback(rmt_channel_handle_t channel, const rmt_rx_done_event_data_t *edata, void *user_data);
-int8_t RemoteParse(int8_t (*tuner_state)[VAR_NO], QueueHandle_t remote_queue);
-void ParseFrame(rmt_symbol_word_t *rmt_nec_symbols, size_t symbol_num, QueueHandle_t remote_queue);
-bool NecParseFrame(rmt_symbol_word_t *rmt_nec_symbols, uint16_t *remote_code);
-bool NecCheckInRange(uint32_t signal_duration, uint32_t spec_duration);
-bool NecParseLogic0(rmt_symbol_word_t *rmt_nec_symbols);
-bool NecParseLogic1(rmt_symbol_word_t *rmt_nec_symbols);
+bool RmtRxDoneCallback(rmt_channel_handle_t channel, const rmt_rx_done_event_data_t *edata, void *userData);
+int8_t RemoteParse(int8_t (*tunerState)[VAR_NO], QueueHandle_t remoteQueue);
+void ParseFrame(rmt_symbol_word_t *rmtNecSymbols, size_t symbolNum, QueueHandle_t remoteQueue);
+bool NecParseFrame(rmt_symbol_word_t *rmtNecSymbols, uint16_t *remoteCode);
+bool NecCheckInRange(uint32_t signalDuration, uint32_t specDuration);
+bool NecParseLogic0(rmt_symbol_word_t *rmtNecSymbols);
+bool NecParseLogic1(rmt_symbol_word_t *rmtNecSymbols);

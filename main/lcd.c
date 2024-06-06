@@ -49,13 +49,13 @@ esp_err_t LcdCmd(char cmd)
 	return ret;
 }
 
-esp_err_t LcdByte(bool is_cmd, char data)
+esp_err_t LcdByte(bool isCmd, char data)
 {
 	if (LOGI_LCD)
 		ESP_LOGI(TAG, "Write: %02x", data);
-	uint8_t i2c_data[4] = {0};
-	AdaptTo4bits(is_cmd, 0, &data, 0, i2c_data);
-	esp_err_t ret = I2CWrite(LCD_ADDRESS, 4, i2c_data);
+	uint8_t i2cData[4] = {0};
+	AdaptTo4bits(isCmd, 0, &data, 0, i2cData);
+	esp_err_t ret = I2CWrite(LCD_ADDRESS, 4, i2cData);
 	if (ret != ESP_OK)
 	{
 		if (LOGE_LCD)
@@ -70,25 +70,25 @@ esp_err_t LcdText(uint8_t row, uint8_t col, char *data)
 {
 	if (LOGI_LCD)
 		ESP_LOGI(TAG, "Text write ('%s').", data);
-	uint8_t data_length = strlen(data);
-	uint8_t i2c_data_length = 4 * (data_length + 1) * sizeof(uint8_t);
-	uint8_t *i2c_data = malloc(i2c_data_length);
-	uint8_t d_index = 0;
-	uint8_t s_index = 0;
-	while (s_index < data_length)
+	uint8_t dataLength = strlen(data);
+	uint8_t i2cDataLength = 4 * (dataLength + 1) * sizeof(uint8_t);
+	uint8_t *i2cData = malloc(i2cDataLength);
+	uint8_t dIndex = 0;
+	uint8_t sIndex = 0;
+	while (sIndex < dataLength)
 	{
-		if (s_index == 0)
+		if (sIndex == 0)
 		{
 			char cmd = LcdPosition(row, col);
-			AdaptTo4bits(true, s_index, &cmd, d_index, i2c_data);
-			d_index++;
+			AdaptTo4bits(true, sIndex, &cmd, dIndex, i2cData);
+			dIndex++;
 		}
-		AdaptTo4bits(false, s_index, data, d_index, i2c_data);
-		d_index++;
-		s_index++;
+		AdaptTo4bits(false, sIndex, data, dIndex, i2cData);
+		dIndex++;
+		sIndex++;
 	};
-	esp_err_t ret = I2CWrite(LCD_ADDRESS, i2c_data_length, i2c_data);
-	free(i2c_data);
+	esp_err_t ret = I2CWrite(LCD_ADDRESS, i2cDataLength, i2cData);
+	free(i2cData);
 	if (ret != ESP_OK)
 	{
 		if (LOGE_LCD)
@@ -182,25 +182,25 @@ uint8_t LcdPosition(uint8_t row, uint8_t col)
 	return col;
 }
 
-void AdaptTo4bits(bool is_cmd, uint8_t s_index, char *source_data, uint8_t d_index, uint8_t *dest_data)
+void AdaptTo4bits(bool isCmd, uint8_t sIndex, char *sourceData, uint8_t dIndex, uint8_t *destData)
 {
-	char en_rs[2];
-	char high_nib, low_nib;
-	if (is_cmd)
+	char enRs[2];
+	char highNib, lowNib;
+	if (isCmd)
 	{
-		en_rs[0] = EN_RS_CMD1;
-		en_rs[1] = EN_RS_CMD2;
+		enRs[0] = EN_RS_CMD1;
+		enRs[1] = EN_RS_CMD2;
 	}
 	else
 	{
-		en_rs[0] = EN_RS_DATA1;
-		en_rs[1] = EN_RS_DATA2;
+		enRs[0] = EN_RS_DATA1;
+		enRs[1] = EN_RS_DATA2;
 	}
-	high_nib = (source_data[s_index] & 0xf0);
-	low_nib = ((source_data[s_index] << 4) & 0xf0);
+	highNib = (sourceData[sIndex] & 0xf0);
+	lowNib = ((sourceData[sIndex] << 4) & 0xf0);
 
-	dest_data[d_index * 4] = high_nib | en_rs[0];
-	dest_data[d_index * 4 + 1] = high_nib | en_rs[1];
-	dest_data[d_index * 4 + 2] = low_nib | en_rs[0];
-	dest_data[d_index * 4 + 3] = low_nib | en_rs[1];
+	destData[dIndex * 4] = highNib | enRs[0];
+	destData[dIndex * 4 + 1] = highNib | enRs[1];
+	destData[dIndex * 4 + 2] = lowNib | enRs[0];
+	destData[dIndex * 4 + 3] = lowNib | enRs[1];
 }

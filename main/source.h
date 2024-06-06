@@ -50,12 +50,12 @@
 void SourcesInit();
 void MapSources();
 void SetAvailibility();
-void SetSource(int8_t (*tuner_state)[VAR_NO]);
+void SetSource(int8_t (*tunerState)[VAR_NO]);
 int8_t ChangeSource(int8_t source);
 int8_t IsHdmiAvailable();
 int8_t ToggleHdmi(int8_t source);
 int8_t ToggleI2S(int8_t source);
-int8_t HdmiNibToSource(int8_t nib_value);
-int8_t I2sNibToSource(int8_t nib_value);
+int8_t HdmiNibToSource(int8_t nibValue);
+int8_t I2sNibToSource(int8_t nibValue);
 void SwitchHdmi();
 void SwitchI2s();

@@ -13,74 +13,74 @@ static const char *TAG = "njw1194";
 */
 
 // logarithmic map of njw1194 volume control (volume 0->20 ==> -95dB->0dB)
-static const uint8_t volume_map[] = {
+static const uint8_t volumeMap[] = {
 	0xff, 0xdf, 0xd0, 0xca, 0xc4, 0xbe, 0xb8, 0xb2, 0xac, 0xa7, 0xa2, 0x9d, 0x98, 0x93, 0x8e, 0x8a, 0x86, 0x82, 0x7e, 0x7a, 0x76,
 	0x72, 0x6e, 0x6b, 0x68, 0x65, 0x60, 0x5e, 0x5c, 0x5a, 0x58, 0x56, 0x54, 0x52, 0x50, 0x4f, 0x4e, 0x4d, 0x4c, 0x4b, 0x4a};
 
-esp_err_t njw1194_init(void)
+esp_err_t Njw1194Init(void)
 {
 	/* No need to init njw1194*/
 	return ESP_OK;
 }
 
-esp_err_t NjwWrite(uint8_t chip_address, uint8_t select_address, uint8_t data)
+esp_err_t NjwWrite(uint8_t chipAddress, uint8_t selectAddress, uint8_t data)
 {
 	if (LOGI_NJW)
 		ESP_LOGI(TAG, "NJW1194 write.");
-	uint8_t spi_data[2] = {0, 0};
-	spi_data[1] = chip_address | (select_address << 4);
-	spi_data[0] = data;
-	esp_err_t ret = SpiWrite(2 * 8, spi_data);
+	uint8_t spiData[2] = {0, 0};
+	spiData[1] = chipAddress | (selectAddress << 4);
+	spiData[0] = data;
+	esp_err_t ret = SpiWrite(2 * 8, spiData);
 	if (ret != ESP_OK)
 	{
 		if (LOGE_NJW)
-			ESP_LOGE(TAG, "NJW1194 write failed: address %02x, data %02x.", spi_data[0], spi_data[1]);
+			ESP_LOGE(TAG, "NJW1194 write failed: address %02x, data %02x.", spiData[0], spiData[1]);
 	}
 	else if (LOGI_NJW)
-		ESP_LOGI(TAG, "NJW1194 write OK: address %02x, data %02x.", spi_data[0], spi_data[1]);
+		ESP_LOGI(TAG, "NJW1194 write OK: address %02x, data %02x.", spiData[0], spiData[1]);
 	return ret;
 }
 
 void SetVolume(int8_t volume, int8_t balance)
 {
-	uint8_t njw_volumeL = volume_map[VOL_MIN];
-	uint8_t njw_volumeR = volume_map[VOL_MIN];
-	float njw_balance = VOL_MIN;
+	uint8_t njwVolumeL = volumeMap[VOL_MIN];
+	uint8_t njwVolumeR = volumeMap[VOL_MIN];
+	float njwBalance = VOL_MIN;
 	switch (balance)
 	{
 	case 0:
-		njw_volumeL = volume_map[volume];
-		njw_volumeR = njw_volumeL;
+		njwVolumeL = volumeMap[volume];
+		njwVolumeR = njwVolumeL;
 		break;
 	case -19 ... - 1:
-		njw_balance = -1 * ((float)balance / 40) * volume_map[volume];
-		njw_volumeL = volume_map[volume];
-		njw_volumeR = volume_map[volume] + (uint8_t)njw_balance;
-		if (njw_volumeR < volume_map[VOL_MAX])
-			njw_volumeR = volume_map[VOL_MIN];
+		njwBalance = -1 * ((float)balance / 40) * volumeMap[volume];
+		njwVolumeL = volumeMap[volume];
+		njwVolumeR = volumeMap[volume] + (uint8_t)njwBalance;
+		if (njwVolumeR < volumeMap[VOL_MAX])
+			njwVolumeR = volumeMap[VOL_MIN];
 		break;
 	case -20:
-		njw_volumeL = volume_map[volume];
+		njwVolumeL = volumeMap[volume];
 		break;
 	case 1 ... 19:
-		njw_balance = ((float)balance / 40) * volume_map[volume];
-		njw_volumeR = volume_map[volume];
-		njw_volumeL = volume_map[volume] + (uint8_t)njw_balance;
-		if (njw_volumeL < volume_map[VOL_MAX])
-			njw_volumeL = volume_map[VOL_MIN];
+		njwBalance = ((float)balance / 40) * volumeMap[volume];
+		njwVolumeR = volumeMap[volume];
+		njwVolumeL = volumeMap[volume] + (uint8_t)njwBalance;
+		if (njwVolumeL < volumeMap[VOL_MAX])
+			njwVolumeL = volumeMap[VOL_MIN];
 		break;
 	case 20:
-		njw_volumeR = volume_map[volume];
+		njwVolumeR = volumeMap[volume];
 		break;
 	}
-	NjwWrite(CHIP_ADDRESS, VOLUME_CTRL1, njw_volumeL);
-	NjwWrite(CHIP_ADDRESS, VOLUME_CTRL2, njw_volumeR);
+	NjwWrite(CHIP_ADDRESS, VOLUME_CTRL1, njwVolumeL);
+	NjwWrite(CHIP_ADDRESS, VOLUME_CTRL2, njwVolumeR);
 }
 
 void SetAnalogInput(int8_t input)
 {
-	uint8_t input_value = (uint8_t)input;
-	NjwWrite(CHIP_ADDRESS, INPUT_SEL, input_value);
+	uint8_t inputValue = (uint8_t)input;
+	NjwWrite(CHIP_ADDRESS, INPUT_SEL, inputValue);
 }
 
 void SetToneCtrl(int8_t state, int8_t treble, int8_t bass)
@@ -96,15 +96,15 @@ void SetToneCtrl(int8_t state, int8_t treble, int8_t bass)
 	}
 }
 
-void SetTone(int8_t state, uint8_t tone_type, int8_t tone_value)
+void SetTone(int8_t state, uint8_t toneType, int8_t toneValue)
 {
 	uint8_t tone = 0;
-	uint8_t tone_c_b = TONE_BOOST;
-	if (tone_value <= 0)
+	uint8_t toneCB = TONE_BOOST;
+	if (toneValue <= 0)
 	{
-		tone_c_b = TONE_CUT;
-		tone_value *= -1;
+		toneCB = TONE_CUT;
+		toneValue *= -1;
 	}
-	tone = (tone_c_b << 7) | (tone_value << 3) | (state << 2);
-	NjwWrite(CHIP_ADDRESS, tone_type, tone);
+	tone = (toneCB << 7) | (toneValue << 3) | (state << 2);
+	NjwWrite(CHIP_ADDRESS, toneType, tone);
 }

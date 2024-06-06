@@ -44,13 +44,12 @@ esp_err_t McpInit(uint8_t address)
 
 esp_err_t McpWrite(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data)
 {
-
-   // concancate register and data to send those two values in i2c_data
-   uint8_t i2c_size = size + 1;
-   uint8_t *i2c_data = malloc((i2c_size) * sizeof(uint8_t));
-   i2c_data[0] = reg;
-   memcpy(i2c_data + (uint8_t)1, data, size);
-   esp_err_t ret = I2CWrite(address, i2c_size, i2c_data);
+   // concancate register and data to send those two values in i2cData
+   uint8_t i2cSize = size + 1;
+   uint8_t *i2cData = malloc((i2cSize) * sizeof(uint8_t));
+   i2cData[0] = reg;
+   memcpy(i2cData + (uint8_t)1, data, size);
+   esp_err_t ret = I2CWrite(address, i2cSize, i2cData);
    if (ret != ESP_OK)
    {
       if (LOGE_MCP)
@@ -58,7 +57,7 @@ esp_err_t McpWrite(uint8_t address, uint8_t reg, uint8_t size, uint8_t *data)
    }
    else if (LOGI_MCP)
       ESP_LOGI(TAG, "Write OK (address %02x, reg %02x, value %02x).", address, reg, *data);
-   free(i2c_data);
+   free(i2cData);
    return ret;
 }
 

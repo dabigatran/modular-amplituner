@@ -36,7 +36,7 @@
 
 esp_err_t LcdInit(void);
 esp_err_t LcdCmd(char cmd);
-esp_err_t LcdByte(bool is_cmd, char data);
+esp_err_t LcdByte(bool isCmd, char data);
 esp_err_t LcdText(uint8_t row, uint8_t col, char *data);
 esp_err_t LcdClear(void);
 esp_err_t LcdClearLine(uint8_t line);
@@ -44,4 +44,4 @@ esp_err_t LcdCursor(uint8_t row, uint8_t col);
 esp_err_t LcdBacklightOn();
 esp_err_t LcdBacklightOff();
 uint8_t LcdPosition(uint8_t row, uint8_t col);
-void AdaptTo4bits(bool is_cmd, uint8_t char_index, char *source_data, uint8_t d_index, uint8_t *dest_data);
+void AdaptTo4bits(bool isCmd, uint8_t charIndex, char *sourceData, uint8_t dIndex, uint8_t *destData);
