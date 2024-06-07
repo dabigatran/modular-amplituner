@@ -71,7 +71,7 @@ void app_main(void)
   Initialize();
   while (1)
   {
-    if (xSemaphoreTake(standbyInterruptSemaphore, STANDBY_SEMAPHORE_BLOCK_TIME == pdPASS))
+    if (xSemaphoreTake(standbyInterruptSemaphore, STANDBY_SEMAPHORE_BLOCK_TIME) == pdPASS)
     {
       uint8_t counter = 0;
       while (gpio_get_level(STANDBY_BUTTON_GPIO) == 0)
@@ -203,12 +203,11 @@ static void IRAM_ATTR RemoteGetLoop()
   {
     ESP_LOGI(AMP_TAG, "Create RMT RX channel.");
   }
-  rmt_rx_channel_config_t rxChannelCfg = {
-      .clk_src = RMT_CLK_SRC_DEFAULT,
-      .resolution_hz = IR_RESOLUTION_HZ,
-      .mem_block_symbols = 64,
-      .gpio_num = IR_RX_GPIO_NUM,
-  };
+  rmt_rx_channel_config_t rxChannelCfg = {0};
+  rxChannelCfg.clk_src = RMT_CLK_SRC_DEFAULT;
+  rxChannelCfg.resolution_hz = IR_RESOLUTION_HZ;
+  rxChannelCfg.mem_block_symbols = 64;
+  rxChannelCfg.gpio_num = IR_RX_GPIO_NUM;
   rmt_channel_handle_t rxChannel = NULL;
   ESP_ERROR_CHECK(rmt_new_rx_channel(&rxChannelCfg, &rxChannel));
   
@@ -218,19 +217,18 @@ static void IRAM_ATTR RemoteGetLoop()
   }
   QueueHandle_t receiveQueue = xQueueCreate(1, sizeof(rmt_rx_done_event_data_t));
   assert(receiveQueue);
-  rmt_rx_event_callbacks_t cbs = {
-      .on_recv_done = RmtRxDoneCallback,
-  };
+
+
+  rmt_rx_event_callbacks_t cbs = {0};
+  cbs.on_recv_done = RmtRxDoneCallback;
   ESP_ERROR_CHECK(rmt_rx_register_event_callbacks(rxChannel, &cbs, receiveQueue));
 
-  rmt_receive_config_t receiveConfig = {
-      .signal_range_min_ns = 1250,
-      .signal_range_max_ns = 12000000,
-  };
-
+  rmt_receive_config_t receiveConfig = {0};
+  receiveConfig.signal_range_min_ns = 1250;
+  receiveConfig.signal_range_max_ns = 12000000;
   ESP_ERROR_CHECK(rmt_enable(rxChannel));
-  rmt_symbol_word_t rawSymbols[64];
-  rmt_rx_done_event_data_t rxData;
+  rmt_symbol_word_t rawSymbols[64]={0};
+  rmt_rx_done_event_data_t rxData={0};
   ESP_ERROR_CHECK(rmt_receive(rxChannel, rawSymbols, sizeof(rawSymbols),&receiveConfig));
   while (1)
   {
@@ -270,7 +268,8 @@ static void StandbyInterruptHandler(void *args)
 
 static void EncoderIsrHandlerAdd(void)
 {
-  gpio_config_t ioConf;
+  
+  gpio_config_t ioConf={0};
   ioConf.intr_type = GPIO_INTR_NEGEDGE;
   ioConf.pin_bit_mask = (1 << INTR_PIN);
   ioConf.mode = GPIO_MODE_INPUT;
@@ -303,7 +302,7 @@ static void EncoderIsrHandlerRemove(void)
 
 static void StandbyIsrHandlerAdd(void)
 {
-  gpio_config_t ioConf;
+  gpio_config_t ioConf={0};
   ioConf.intr_type = GPIO_INTR_NEGEDGE;
   ioConf.pin_bit_mask = (1ULL << STANDBY_BUTTON_GPIO);
   ioConf.mode = GPIO_MODE_INPUT;

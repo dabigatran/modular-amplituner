@@ -2,14 +2,14 @@
 
 esp_err_t I2CInit(void)
 {
-   i2c_config_t config = {
-       .mode = I2C_MODE_MASTER,
-       .sda_io_num = GPIO_NUM_21,
-       .scl_io_num = GPIO_NUM_22,
-       .sda_pullup_en = GPIO_PULLUP_ENABLE,
-       .scl_pullup_en = GPIO_PULLUP_ENABLE,
-       .master.clk_speed = 400000,
-   };
+   i2c_config_t config = {0};
+   config.mode = I2C_MODE_MASTER;
+   config.sda_io_num = GPIO_NUM_21;
+   config.scl_io_num = GPIO_NUM_22;
+   config.sda_pullup_en = GPIO_PULLUP_ENABLE;
+   config.scl_pullup_en = GPIO_PULLUP_ENABLE;
+   config.master.clk_speed = 400000;
+   
    esp_err_t ret = i2c_param_config(I2C_PORT, &config);
    if (LOGE_I2C && ret != ESP_OK)
    {
