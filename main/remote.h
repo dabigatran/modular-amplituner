@@ -42,7 +42,7 @@ static const uint16_t CHROMECAST_VOLUME_DOWN = 0xE41B;
 static const uint16_t CHROMECAST_MUTE_UNMUTE = 0xE31C;
 
 bool RmtRxDoneCallback(rmt_channel_handle_t channel, const rmt_rx_done_event_data_t *edata, void *userData);
-int8_t RemoteParse(int8_t (*tunerState)[VAR_NO], uint16_t remoteCode[2]);
+int8_t RemoteParse(int8_t (*tunerState)[VAR_NO], uint16_t remoteCode[2], bool standbyMode);
 void ParseFrame(rmt_symbol_word_t *rmtNecSymbols, size_t symbolNum, QueueHandle_t remoteQueue);
 bool NecParseFrame(rmt_symbol_word_t *rmtNecSymbols, uint16_t *remoteCode);
 bool NecCheckInRange(uint32_t signalDuration, uint32_t specDuration);

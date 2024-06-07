@@ -8,9 +8,14 @@ bool RmtRxDoneCallback(rmt_channel_handle_t channel, const rmt_rx_done_event_dat
     return highTaskWakeup == pdTRUE;
 }
 
-int8_t RemoteParse(int8_t (*tunerState)[VAR_NO], uint16_t remoteCode[2])
+int8_t RemoteParse(int8_t (*tunerState)[VAR_NO], uint16_t remoteCode[2], bool standbyMode)
 {
-    if (remoteCode[0] == CHROMECAST_ADDRESS)
+    if (LOGI_RMT)
+    {
+        ESP_LOGI(RMT_TAG, "Equipment code: %02x, function code: %02x", remoteCode[0], remoteCode[1]);
+    }
+    
+    if (standbyMode == OFF && remoteCode[0] == CHROMECAST_ADDRESS)
     {
         switch (remoteCode[1])
         {
@@ -34,9 +39,12 @@ int8_t RemoteParse(int8_t (*tunerState)[VAR_NO], uint16_t remoteCode[2])
             return VOLUME;
         }
     }
-    if (LOGI_RMT)
+    else if (standbyMode == ON && remoteCode[0] == CHROMECAST_ADDRESS)
     {
-        ESP_LOGI(RMT_TAG, "Equipment code: %02x, function code: %02x", remoteCode[0], remoteCode[1]);
+        if (remoteCode[1] == CHROMECAST_ON_OFF)
+        {
+            return STANDBY;
+        }
     }
     return NONE;
 }

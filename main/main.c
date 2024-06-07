@@ -71,7 +71,7 @@ void app_main(void)
   Initialize();
   while (1)
   {
-    if (xSemaphoreTake(standbyInterruptSemaphore, 3000) == pdPASS)
+    if (xSemaphoreTake(standbyInterruptSemaphore, 1400) == pdPASS)
     {
       uint8_t counter = 0;
       while (gpio_get_level(STANDBY_BUTTON_GPIO) == 0)
@@ -121,15 +121,15 @@ static void SetupEncoderTasks(void)
 {
   encoderInterruptSemaphore = xSemaphoreCreateBinary();
   encoderQueue = xQueueCreate(ENC_QUEUE_LENGTH, ENCODER_DATA);
-  xTaskCreatePinnedToCore(EncoderGetLoop, "EncoderGetLoop", 2048, NULL, 6, &encoderGetTask, 0);
+  xTaskCreatePinnedToCore(EncoderGetLoop, "EncoderGetLoop", 4096, NULL, 6, &encoderGetTask, 0);
   xTaskCreatePinnedToCore(EncoderSetLoop, "EncoderSetLoop", 4096, NULL, 5, &encoderSetTask, 1);
-  xTaskCreatePinnedToCore(EncoderInterruptClearLoop, "EncoderInterruptClearLoopp", 2048, NULL, 1, &encoderInterruptClearTask, 1);
+  xTaskCreatePinnedToCore(EncoderInterruptClearLoop, "EncoderInterruptClearLoopp", 4096, NULL, 1, &encoderInterruptClearTask, 1);
 }
 
 static void SetupRemoteTasks(void)
 {
   xTaskCreatePinnedToCore(RemoteGetLoop, "RemoteGetLoop", 4096, NULL, 4, &remoteGetTask, 0);
-  xTaskCreatePinnedToCore(RemoteSetLoop, "RemoteSetLoop", 2048, NULL, 3, &remoteSetTask, 1);
+  xTaskCreatePinnedToCore(RemoteSetLoop, "RemoteSetLoop", 4096, NULL, 3, &remoteSetTask, 1);
 }
 
 static void DeleteEncoderTasks(void)
@@ -158,11 +158,12 @@ static void IRAM_ATTR EncoderGetLoop()
 static void IRAM_ATTR EncoderSetLoop()
 {
   uint8_t interruptData[2] = {0};
+  int8_t lastChange=0;
   while (1)
   {
     if(xQueueReceive(encoderQueue, &interruptData, PORT_DELAY)!=pdFALSE)
     {
-      int8_t lastChange = CreateSnapshot(tunerState, interruptData);
+      lastChange = CreateSnapshot(tunerState, interruptData);
       SetChange(lastChange);
     }
   }
@@ -244,11 +245,12 @@ static void IRAM_ATTR RemoteGetLoop()
 static void IRAM_ATTR RemoteSetLoop()
 {
   uint16_t remoteCode[2] = {0};
+  int8_t lastChange=0;
   while (1)
   {
     if(xQueueReceive(remoteQueue, &remoteCode, PORT_DELAY)!=pdFALSE)
     {
-      int8_t lastChange = RemoteParse(tunerState, remoteCode);
+      lastChange = RemoteParse(tunerState, remoteCode, standbyMode);
       SetChange(lastChange);
     }
   }
@@ -335,12 +337,12 @@ static void DisplayInterface(void)
 
 static void SetupAudioDefaults(void)
 {
-  tunerState[VOLUME][ACT_VAL] = 17;
-  tunerState[SOURCE][ACT_VAL] = 5;
-  tunerState[BALANCE][ACT_VAL] = 0;
-  tunerState[TREBLE][ACT_VAL] = 0;
-  tunerState[BASS][ACT_VAL] = 0;
-  tunerState[TONE_SW][ACT_VAL] = 0;
+  tunerState[VOLUME][ACT_VAL] = VOL_DEFAULT;
+  tunerState[SOURCE][ACT_VAL] = SRC_DEFAULT;
+  tunerState[BALANCE][ACT_VAL] = BAL_DEFAULT;
+  tunerState[TREBLE][ACT_VAL] = TRE_DEFAULT;
+  tunerState[BASS][ACT_VAL] = BAS_DEFAULT;
+  tunerState[TONE_SW][ACT_VAL] = TON_DEFAULT;
 }
 
 static void BlinkLed(uint8_t state)
@@ -433,13 +435,21 @@ static void IRAM_ATTR SetChange(int8_t lastChange)
   case SELECTED:
     LcdClearLine(1);
     if (tunerState[SELECTED][ACT_VAL] == SOURCE)
+    {
       sprintf(buffer, "%s", sourceAlias[tunerState[SOURCE][ACT_VAL]]);
+    }
     else if (tunerState[SELECTED][ACT_VAL] == TONE_SW && tunerState[TONE_SW][ACT_VAL] == 1)
+    {
       sprintf(buffer, "%s %s", optionAlias[tunerState[SELECTED][ACT_VAL]], "ON");
+    }
     else if (tunerState[SELECTED][ACT_VAL] == TONE_SW && tunerState[TONE_SW][ACT_VAL] == 0)
+    {
       sprintf(buffer, "%s %s", optionAlias[tunerState[SELECTED][ACT_VAL]], "OFF");
+    }
     else
+    {
       sprintf(buffer, "%s %3d", optionAlias[tunerState[SELECTED][ACT_VAL]], tunerState[tunerState[SELECTED][ACT_VAL]][ACT_VAL]);
+    }
     LcdText(1, 0, buffer);
   }
 }
@@ -491,6 +501,9 @@ static void Standby(uint8_t state)
     SetTone(tunerState[TONE_SW][ACT_VAL], TREBLE_CTRL, tunerState[TREBLE][ACT_VAL]);
     SetTone(tunerState[TONE_SW][ACT_VAL], BASS_CTRL, tunerState[BASS][ACT_VAL]);
     SetSource(tunerState);
+    if (tunerState[VOLUME][ACT_VAL]>VOL_MAX_ON_STARTUP){
+      tunerState[VOLUME][ACT_VAL] = VOL_MAX_ON_STARTUP;
+    }
     SetVolume(tunerState[VOLUME][ACT_VAL], tunerState[BALANCE][ACT_VAL]);
     vTaskDelay(100 / portTICK_PERIOD_MS);
     DisplayInterface();

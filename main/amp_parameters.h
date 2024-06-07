@@ -17,20 +17,29 @@ static const gpio_num_t DIGITAL_POWER_CONTROL_GPIO = GPIO_NUM_26;
 static const gpio_num_t AMP_AUDIO_CONTROL_GPIO = GPIO_NUM_25;
 static const gpio_num_t AMP_POWER_CONTROL_GPIO = GPIO_NUM_33;
 
+
 static const int8_t VOL_MIN = 0;
 static const int8_t VOL_MAX = 40;
+static const int8_t VOL_DEFAULT = 17;
+static const int8_t VOL_MAX_ON_STARTUP = 22;
 static const int8_t SRC_MAX = 7;
 static const int8_t SRC_MIN = 0;
+static const int8_t SRC_DEFAULT = 5; //Spdif
 static const int8_t BAL_MAX = 20;
 static const int8_t BAL_MIN = -20;
+static const int8_t BAL_DEFAULT = 0;
 static const int8_t TRE_MAX = 10;
 static const int8_t TRE_MIN = -10;
+static const int8_t TRE_DEFAULT = 0;
 static const int8_t BAS_MAX = 10;
 static const int8_t BAS_MIN = -10;
+static const int8_t BAS_DEFAULT = 0;
 static const int8_t TON_MAX = 1;
 static const int8_t TON_MIN = 0;
+static const int8_t TON_DEFAULT = 0;
 static const int8_t SEL_MIN = 2;
 static const int8_t SEL_MAX = 6;
+
 static const int8_t NONE = -1;
 static const int8_t VOLUME = 0;
 static const int8_t SELECTED = 1;
@@ -55,6 +64,5 @@ static const int8_t ENC_QUEUE_LENGTH = 40;
 static const int8_t RMT_QUEUE_LENGTH = 20;
 static const int8_t ON = 1;
 static const int8_t OFF = 0;
-static const int8_t MY_CONSTANT = 23;
 
 #endif
