@@ -16,7 +16,18 @@ static const gpio_num_t AUDIO_POWER_CONTROL_GPIO = GPIO_NUM_18;
 static const gpio_num_t DIGITAL_POWER_CONTROL_GPIO = GPIO_NUM_26;
 static const gpio_num_t AMP_AUDIO_CONTROL_GPIO = GPIO_NUM_25;
 static const gpio_num_t AMP_POWER_CONTROL_GPIO = GPIO_NUM_33;
-
+static const uint32_t STANDBY_SEMAPHORE_BLOCK_TIME = 1500;
+static const uint32_t STANDBY_BUTTON_DELAY = 500;
+static const uint8_t STANDBY_BUTTON_COUNTER_MAX = 5;
+static const uint32_t DEFAULT_STACK_DEPTH = 4096;
+static const BaseType_t CORE0 = 0;
+static const BaseType_t CORE1 = 1;
+static const UBaseType_t PRIORITY_1 = 1;
+static const UBaseType_t PRIORITY_2 = 2;
+static const UBaseType_t PRIORITY_3 = 3;
+static const UBaseType_t PRIORITY_4 = 4;
+static const UBaseType_t PRIORITY_5 = 5;
+static const UBaseType_t PRIORITY_6 = 6;
 
 static const int8_t VOL_MIN = 0;
 static const int8_t VOL_MAX = 40;

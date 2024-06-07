@@ -71,14 +71,14 @@ void app_main(void)
   Initialize();
   while (1)
   {
-    if (xSemaphoreTake(standbyInterruptSemaphore, 1400) == pdPASS)
+    if (xSemaphoreTake(standbyInterruptSemaphore, STANDBY_SEMAPHORE_BLOCK_TIME == pdPASS))
     {
       uint8_t counter = 0;
       while (gpio_get_level(STANDBY_BUTTON_GPIO) == 0)
       {
         counter++;
-        vTaskDelay(100 / portTICK_PERIOD_MS);
-        if (counter > 4)
+        vTaskDelay(STANDBY_BUTTON_DELAY/STANDBY_BUTTON_COUNTER_MAX/portTICK_PERIOD_MS);
+        if (counter >= STANDBY_BUTTON_COUNTER_MAX)
         {
           standbyMode = !standbyMode;
           Standby(standbyMode);
@@ -121,15 +121,15 @@ static void SetupEncoderTasks(void)
 {
   encoderInterruptSemaphore = xSemaphoreCreateBinary();
   encoderQueue = xQueueCreate(ENC_QUEUE_LENGTH, ENCODER_DATA);
-  xTaskCreatePinnedToCore(EncoderGetLoop, "EncoderGetLoop", 4096, NULL, 6, &encoderGetTask, 0);
-  xTaskCreatePinnedToCore(EncoderSetLoop, "EncoderSetLoop", 4096, NULL, 5, &encoderSetTask, 1);
-  xTaskCreatePinnedToCore(EncoderInterruptClearLoop, "EncoderInterruptClearLoopp", 4096, NULL, 1, &encoderInterruptClearTask, 1);
+  xTaskCreatePinnedToCore(EncoderGetLoop, "EncoderGetLoop", DEFAULT_STACK_DEPTH, NULL, PRIORITY_6, &encoderGetTask, CORE0);
+  xTaskCreatePinnedToCore(EncoderSetLoop, "EncoderSetLoop", DEFAULT_STACK_DEPTH, NULL, PRIORITY_5, &encoderSetTask, CORE1);
+  xTaskCreatePinnedToCore(EncoderInterruptClearLoop, "EncoderInterruptClearLoop", DEFAULT_STACK_DEPTH, NULL, PRIORITY_1, &encoderInterruptClearTask, CORE1);
 }
 
 static void SetupRemoteTasks(void)
 {
-  xTaskCreatePinnedToCore(RemoteGetLoop, "RemoteGetLoop", 4096, NULL, 4, &remoteGetTask, 0);
-  xTaskCreatePinnedToCore(RemoteSetLoop, "RemoteSetLoop", 4096, NULL, 3, &remoteSetTask, 1);
+  xTaskCreatePinnedToCore(RemoteGetLoop, "RemoteGetLoop", DEFAULT_STACK_DEPTH, NULL, PRIORITY_4, &remoteGetTask, CORE0);
+  xTaskCreatePinnedToCore(RemoteSetLoop, "RemoteSetLoop", DEFAULT_STACK_DEPTH, NULL, PRIORITY_3, &remoteSetTask, CORE1);
 }
 
 static void DeleteEncoderTasks(void)
