@@ -472,7 +472,7 @@ static void Standby(uint8_t state)
     EncoderIsrHandlerRemove();
     SpiBusRemoveNjw1194();
     DeleteEncoderTasks();
-    vTaskDelay(3000 / portTICK_PERIOD_MS);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
     DigitalPowerToggle();
     if (LOGI_MAIN)
     {
@@ -490,6 +490,7 @@ static void Standby(uint8_t state)
     AmpPowerControl(OFF);
     DigitalPowerToggle();
     AudioPowerToggle();
+    vTaskDelay(200 / portTICK_PERIOD_MS);
     McpInit(MCP1_ADDRESS);
     LcdInit();
     DisplayWelcomeMessage();
@@ -504,7 +505,6 @@ static void Standby(uint8_t state)
       tunerState[VOLUME][ACT_VAL] = VOL_MAX_ON_STARTUP;
     }
     SetVolume(tunerState[VOLUME][ACT_VAL], tunerState[BALANCE][ACT_VAL]);
-    vTaskDelay(100 / portTICK_PERIOD_MS);
     DisplayInterface();
     AmpAudioControl(OFF);
     if (LOGI_MAIN)

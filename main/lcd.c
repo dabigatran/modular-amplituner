@@ -10,7 +10,7 @@ esp_err_t LcdInit(void)
 	esp_err_t success = 0;
 	usleep(50000);
 	success = success + LcdCmd(FUNCTION_SET_0);
-	usleep(5000);
+	usleep(10000);
 	success = success + LcdCmd(FUNCTION_SET_0);
 	usleep(200);
 	success = success + LcdCmd(FUNCTION_SET_0);
