@@ -2,7 +2,6 @@
 !/**/
 !*.*
 *.jpg
-*.png
 **/.vscode/
 **/build/
 **/docs/
