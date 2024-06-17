@@ -1,11 +1,14 @@
+
 #define OPTION_NO (uint8_t)7
 #define VAR_NO (uint8_t)5
 #define MAX_SRC_ALIAS_LENGTH (uint8_t)16
 #define MAX_OPT_ALIAS_LENGTH (uint8_t)12
 #define MAX_SOURCES (uint8_t)9
 
+
 #ifndef _amp_parameters_H_
 #define _amp_parameters_H_
+
 static const uint8_t LOGE_MAIN = false;
 static const uint8_t LOGI_MAIN = false;
 
