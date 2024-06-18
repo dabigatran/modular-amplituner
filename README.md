@@ -1,6 +1,6 @@
 # Modular Amplituner
 
-![Project Logo](path/to/your/logo.png)
+![Project Logo](assembled_system/ampli_tuner_v1_03.jpg)
 
 ## Overview
 
