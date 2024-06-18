@@ -15,8 +15,8 @@
 - **Step-Down Converter Modules (2x)**
   - No-Name, based on TPS5430 chip (Texas Instruments)
   - [Datasheet](../receiver/tps5430.pdf)
-  - ![Photo] (../receiver/tps5430_module1.jpg)
-  - ![Photo] (../receiver/tps5430_module2.jpg)
+  - ![Photo](../receiver/tps5430_module1.jpg)
+  - ![Photo](../receiver/tps5430_module2.jpg)
 - **Low-Noise Linear Stabilizer Module (+5V, 500mA)**
   - No-Name, based on 2x LT3045 chip (Analog Devices)
   - [Datasheet](../receiver/lt3045_stabilizer.pdf)
