@@ -1,5 +1,4 @@
-Speaker set (based on SB Acoustics' open source BROMO project, read pdfs): <br>
-https://sbacoustics.com/product/bromo/<br>
+#### Speakers (based on SBAcoustics Open Source Bromo Project, read pdfs) - [Bromo Project](https://sbacoustics.com/product/bromo/):
 a. 2x SB26CDC-C000-4 tweeter, <br>
 b. 2x mid-bass speaker SB17CAC35-4 x2, <br>
 c. a set of components for two crossovers according to schematics, <br>
