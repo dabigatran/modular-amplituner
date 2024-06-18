@@ -4,7 +4,7 @@
 
 ## Overview
 
-**Project Short Title:** I2S Bus Control Using I2C and SPI Protocols
+**Project Short Title:** I2S Bus Control Using I2C and SPI Protocols</br>
 **Project Full Title:** I2S bus control using I2C and SPI protocols on the example of a modular audio-video system consisting of a receiver (tuner), an amplifier and a speaker system
 
 **Abstract:** This project aims to create a modular audio/video system consisting of an audio/video receiver, audio amplifier, and stereo speaker system using commercially available components. The system uses universal I2C and SPI protocols for control and the I2S bus for audio data transmission. Its modular design allows for both hardware and software upgrades, catering to advanced users and audio hobbyists.
