@@ -14,7 +14,7 @@
 
 ### Microcontroller & Extenders
 - **Microcontroller Module**
-  - SoC ESP32 WROOM DEV KIT (Espressif Systems)
+  - SoC ESP32 WROVER DEV KIT (Espressif Systems)
 - **I2C Bus Extender Module**
   - MCP23017 (Waveshare 15391)
 
@@ -52,5 +52,6 @@
 - **Other Components**
   - NPN transistors, resistors, capacitors, universal PCBs, wiring, RCA connectors, USB, Bluetooth antennas, heat sink
 - **Enclosure**
-  - See [enclosure directory](enclosure) for STL files
+  - See [enclosure directory](../enclosure) for STL files
+
 
