@@ -46,8 +46,8 @@
 #### Amplifier
 ![Amplifier Schematic](amplifier/amplifier_connection_schematics.png)
 
-#### Speakers
-![Speakers Schematic](speakers/speakers_09.jpg)
+#### Speakers (based on SBAcoustics Open Source Bromo Project)
+![Speakers Schematic](speakers/Bromo-Crossover-Schematic.pdf)
 
 #### Firmware
 ![Firmaware Main loop Schematic](main/firmware_app_main_scheme.png)
