@@ -104,6 +104,6 @@
 - **Other Components**
   - NPN transistors, resistors, capacitors, universal PCBs, wiring, RCA connectors, USB, Bluetooth antennas, heat sink
 - **Enclosure**
-  - See [enclosure directory](../enclosure) for STL files
+  - See [Enclosure](../enclosure/readme.md)
 
 
