@@ -12,7 +12,7 @@
 ### Power Supply
 - **Switching Power Supply (60W, 12V)**
   - No-Name, taken from notebook
-  - [Photo](../receiver/No_Name_switching_power_supply.jpg)
+  - ![Photo](../receiver/No_Name_switching_power_supply.jpg)
 
 ### Converters & Stabilizers
 - **Step-Down Converter Modules (2x)**
@@ -61,8 +61,8 @@
 - **Analog Audio Control Module**
   - Based on NJW1194 chip (New Japan Radio)
   - [Datasheet](../receiver/NJW1194.PDF)
-  - ![Photo](../receiver/PCM5102A_njw1194_module_top.jpg)
-  - ![Photo](../receiver/PCM5102A_njw1194_module_bottom.jpg)
+  - ![Photo](../receiver/njw1194_module_top.jpg)
+  - ![Photo](../receiver/njw1194_module_bottom.jpg)
 - **Bluetooth 5.0 Stereo Module**
   - Based on QCC5125 chip (Qualcomm)
   - [Datasheet](../receiver/SJR-BTM525_SPEC.pdf)
