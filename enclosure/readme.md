@@ -1,13 +1,15 @@
+# Enclosure
+
 ## STLs
-- [Amplifier Base](..\enclosure\amplifier_base.stl)
-- [Receiver Base](..\enclosure\receiver_base.stl)
-- [Receiver and Amplifier Cover](..\enclosure\receiver_and_amplifier_cover.stl)
-- [Receiver and Amplifier Cover Support](..\enclosure\receiver_and_amplifier_cover_support.stl)
-- [Receiver and Amplifier PCB Support](..\enclosure\receiver_and_amplifier_pcb_support.stl)
-- [Receiver and Amplifier Pad](..\enclosure\receiver_and_amplifier_pad.stl)
-- [Receiver Power Supply Support](..\enclosure\receiver_power_supply_support.stl)
-- [Volume Knob](..\enclosure\volume_knob.stl)
-- [Option Knob](..\enclosure\option_knob.stl)
+- [Amplifier Base](../enclosure/amplifier_base.stl)
+- [Receiver Base](../enclosure/receiver_base.stl)
+- [Receiver and Amplifier Cover](../enclosure/receiver_and_amplifier_cover.stl)
+- [Receiver and Amplifier Cover Support](../enclosure/receiver_and_amplifier_cover_support.stl)
+- [Receiver and Amplifier PCB Support](../enclosure/receiver_and_amplifier_pcb_support.stl)
+- [Receiver and Amplifier Pad](../enclosure/receiver_and_amplifier_pad.stl)
+- [Receiver Power Supply Support](../enclosure/receiver_power_supply_support.stl)
+- [Volume Knob](../enclosure/volume_knob.stl)
+- [Option Knob](../enclosure/option_knob.stl)
 
 ## Printing Details
 - **Material**: Impact PLA (Fiberology)
