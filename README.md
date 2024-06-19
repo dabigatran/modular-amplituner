@@ -40,8 +40,6 @@
 
 #### Receiver - [full description](receiver/readme.md)
 ![Receiver Audio Path Schematic](receiver/receiver_audio_path.png)
-![Receiver User Interface Schematic](receiver/receiver_interface_control_signals.png)
-![Receiver Power Supply Schematic](receiver/receiver_power_supply_schematics.png)
 
 #### Amplifier - [full description](amplifier/readme.md)
 ![Amplifier Schematic](amplifier/amplifier_connection_schematics.png)
