@@ -95,7 +95,7 @@
   - Two PEC11H series encoders and switch (Bourns)
   - [Datasheet](../receiver/pec11h-1879218.pdf)
   - ![Photo](../receiver/encoders_module_top.jpg)
-  - ![Photo](../receiver/sencoders_module_bottom.jpg)
+  - ![Photo](../receiver/encoders_module_bottom.jpg)
 - **Inverter Module with Schmitt Circuit**
   - Based on 74HC14 integrated circuit (Diodes Incorporated)
   - [Datasheet](../receiver/74HC14.pdf)
