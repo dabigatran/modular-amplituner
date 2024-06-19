@@ -1,6 +1,5 @@
 # Speakers 
-- based on SBAcoustics Open Source Bromo Project
-- [Bromo Project](https://sbacoustics.com/product/bromo/)
+- based on SBAcoustics Open Source [Bromo Project](https://sbacoustics.com/product/bromo/)
 
 # Speaker Components
 
