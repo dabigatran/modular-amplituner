@@ -1,4 +1,6 @@
 # Assembled and working system in temporary enclosure (receiver, amplifier, speakers)
+- [Amplituner User Interface presentation (download .mp4 to view)](https://raw.githubusercontent.com/dabigatran/modular-amplituner/main/assembled_system/ampli_tuner_v1_main.mp4)
+- [Amplituner Chromecast Remote Control presentation (download .mp4 to view)](https://raw.githubusercontent.com/dabigatran/modular-amplituner/main/assembled_system/amplituner_v1_remote.mp4)
 - ![amplituner_1](../assembled_system/ampli_tuner_v1_03.jpg)
 - ![amplituner_2](../assembled_system/ampli_tuner_v1_04.jpg)
 - ![amplituner_3](../assembled_system/ampli_tuner_v1_05.jpg)
@@ -14,5 +16,3 @@
 - ![amplituner_13](../assembled_system/ampli_tuner_v1_20.jpg)
 - ![amplituner_14](../assembled_system/ampli_tuner_v1_21.jpg)
 - ![amplituner_15](../assembled_system/ampli_tuner_v1_22.jpg)
-- [Amplituner User Interface presentation (download .mp4 to view)](https://raw.githubusercontent.com/dabigatran/modular-amplituner/main/assembled_system/ampli_tuner_v1_main.mp4)
-- [Amplituner chromecast Remote Control presentation (download .mp4 to view)](https://raw.githubusercontent.com/dabigatran/modular-amplituner/main/assembled_system/amplituner_v1_remote.mp4)
