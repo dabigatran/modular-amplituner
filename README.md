@@ -38,18 +38,19 @@
 
 ### Schematics
 
-#### Receiver
+#### Receiver - [full description](receiver/readme.md)
 ![Receiver Audio Path Schematic](receiver/receiver_audio_path.png)
 ![Receiver User Interface Schematic](receiver/receiver_interface_control_signals.png)
 ![Receiver Power Supply Schematic](receiver/receiver_power_supply_schematics.png)
 
-#### Amplifier
+#### Amplifier - [full description](amplifier/readme.md)
 ![Amplifier Schematic](amplifier/amplifier_connection_schematics.png)
 
-#### Speakers (based on SBAcoustics Open Source Bromo Project)
-   - [Bromo Project](https://sbacoustics.com/product/bromo/)
+#### Speakers 
+   - based on SBAcoustics Open Source [Bromo Project](https://sbacoustics.com/product/bromo/)
+   - [full description](speakers/readme.md)
 
-#### Firmware
+#### Firmware - [full description](main/readme.md)
 ![Firmaware Main loop Schematic](main/firmware_app_main_scheme.png)
 
 ## Technical Specifications
