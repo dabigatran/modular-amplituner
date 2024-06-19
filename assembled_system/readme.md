@@ -14,5 +14,5 @@
 - ![amplituner_13](../assembled_system/ampli_tuner_v1_20.jpg)
 - ![amplituner_14](../assembled_system/ampli_tuner_v1_21.jpg)
 - ![amplituner_15](../assembled_system/ampli_tuner_v1_22.jpg)
-- [Amplituner User Interface presentation (download .mp4 to view)](https://github.com/dabigatran/modular-amplituner/blob/main/assembled_system/amplituner_v1_main.mp4)
-- [Amplituner chromecast Remote Control presentation(download .mp4 to view)](https://github.com/dabigatran/modular-amplituner/blob/main/assembled_system/amplituner_v1_remote.mp4)
+- [Amplituner User Interface presentation (download .mp4 to view)](https://github.com/dabigatran/modular-amplituner/assembled_system/amplituner_v1_main.mp4)
+- [Amplituner chromecast Remote Control presentation(download .mp4 to view)](https://github.com/dabigatran/modular-amplituner/assembled_system/amplituner_v1_remote.mp4)
