@@ -13,7 +13,7 @@
   - [Datasheet](../speakers/6in-SB17CAC35-4.pdf)
 
 ## Crossovers
-- **Set of Components for Two Crossovers**
+- **Set of Components for Two Crossovers (Jantzen Audio)**
   - [Crossover Schematic](../speakers/Bromo-Crossover-Schematic.pdf)
 
 ## Enclosure
@@ -27,13 +27,13 @@
 - **Varnish**
 
 ## Photos
-  [Photo](../speakers/speakers_01.jpg)
-  [Photo](../speakers/speakers_02.jpg)
-  [Photo](../speakers/speakers_03.jpg)
-  [Photo](../speakers/speakers_04.jpg)
-  [Photo](../speakers/speakers_05.jpg)
-  [Photo](../speakers/speakers_06.jpg)
-  [Photo](../speakers/speakers_07.jpg)
-  [Photo](../speakers/speakers_08.jpg)
-  [Photo](../speakers/speakers_09.jpg)
-  [Photo](../speakers/speakers_10.jpg)
+  ![Photo](../speakers/speakers_01.jpg)
+  ![Photo](../speakers/speakers_02.jpg)
+  ![Photo](../speakers/speakers_03.jpg)
+  ![Photo](../speakers/speakers_04.jpg)
+  ![Photo](../speakers/speakers_05.jpg)
+  ![Photo](../speakers/speakers_06.jpg)
+  ![Photo](../speakers/speakers_07.jpg)
+  ![Photo](../speakers/speakers_08.jpg)
+  ![Photo](../speakers/speakers_09.jpg)
+  ![Photo](../speakers/speakers_10.jpg)
