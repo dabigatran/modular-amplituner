@@ -1,16 +1,14 @@
 # Speakers 
-    - based on SBAcoustics Open Source Bromo Project
-    - [Bromo Project](https://sbacoustics.com/product/bromo/)
-    - ![Speaker Schematic 1](../speakers/Bromo-Crossover-Schematic.pdf)
-    - ![Speaker Schematic 2](../speakers/Bromo-Cabinet-Drawing.pdf)
-    - ![Speaker Schematic 3](speakers/schematic3.png)
+- based on SBAcoustics Open Source Bromo Project
+- [Bromo Project](https://sbacoustics.com/product/bromo/)
+- [Crossover Schematic](../speakers/Bromo-Crossover-Schematic.pdf)
+- [Cabinet Drawing](../speakers/Bromo-Cabinet-Drawing.pdf)
 
 # Speaker Components
 
 ## Tweeters
 - **2x SB26CDC-C000-4 Tweeter**
   - High-performance tweeter with advanced materials for exceptional sound quality.
-  - ![Speaker Schematic 1](../speakers/Bromo-Crossover-Schematic.pdf)
   - [Datasheet](speakers/sb26cdc-c000-4.pdf)
   - ![SB26CDC-C000-4 Tweeter Schematic](speakers/sb26cdc-c000-4_schematic.png)
 
