@@ -14,5 +14,5 @@
 - ![amplituner_13](../assembled_system/ampli_tuner_v1_20.jpg)
 - ![amplituner_14](../assembled_system/ampli_tuner_v1_21.jpg)
 - ![amplituner_15](../assembled_system/ampli_tuner_v1_22.jpg)
-- ![Amplituner User Interface presentation](../assembled_system/ampli_tuner_v1_main.mp4)
-- ![Amplituner chromecast Remote Control presentation](../assembled_system/ampli_tuner_v1_remote.mp4)
+- [Amplituner User Interface presentation](../assembled_system/ampli_tuner_v1_main.mp4)
+- [Amplituner chromecast Remote Control presentation](../assembled_system/ampli_tuner_v1_remote.mp4)
