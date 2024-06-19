@@ -16,3 +16,5 @@
 - ![amplituner_15](../assembled_system/ampli_tuner_v1_22.jpg)
 - [Amplituner User Interface presentation (download .mp4 to view)](../assembled_system/ampli_tuner_v1_main.mp4 "download")
 - [Amplituner chromecast Remote Control presentation(download .mp4 to view)](../assembled_system/ampli_tuner_v1_remote.mp4 "download")
+<a href="../assembled_system/ampli_tuner_v1_main.mp4" download>Amplituner User Interface presentation (download .mp4 to view)</a>
+<a href="../assembled_system/ampli_tuner_v1_remote.mp4" download>Remote Control</a>
