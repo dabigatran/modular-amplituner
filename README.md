@@ -45,7 +45,7 @@
 ![Amplifier Schematic](amplifier/amplifier_connection_schematics.png)
 
 #### Speakers - [full description](speakers/readme.md)
-   - based on SBAcoustics Open Source [Bromo Project](https://sbacoustics.com/product/bromo/)
+
    
 #### Firmware - [full description](main/readme.md)
 ![Firmaware Main loop Schematic](main/firmware_app_main_scheme.png)
