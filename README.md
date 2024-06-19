@@ -34,7 +34,7 @@
 - **Display:** LCD for current status and volume
 - **Remote Control:** Infrared with Chromecast integration
 
-## Assembled System - [full description](assembled_system/readme.md)
+## Assembled System - [presentations and photos](assembled_system/readme.md)
 
 ## System Architecture
 
