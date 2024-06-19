@@ -50,6 +50,8 @@
 #### Firmware - [full description](main/readme.md)
 ![Firmaware Main loop Schematic](main/firmware_app_main_scheme.png)
 
+#### Assembled System - [full description](assembled_system/readme.md)
+
 ## Technical Specifications
 
 ### Functional Requirements
