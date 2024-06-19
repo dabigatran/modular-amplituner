@@ -28,7 +28,7 @@
 
 ## Photos
 ![Printer](../enclosure/printer.jpg)
-![Receiver Encolsure Front](../enclosure/enclosure_front.jpg)
-![Receiver Encolsure Front](../enclosure/enclosure_back.jpg)
-![Receiver Encolsure Front](../enclosure/enclosure_bottom.jpg)
+![Receiver Enclosure Front](../enclosure/enclosure_front.jpg)
+![Receiver Enclosure Front](../enclosure/enclosure_back.jpg)
+![Receiver Enclosure Front](../enclosure/enclosure_bottom.jpg)
 ![Spray Glue Filler Primer](../enclosure/spray_glue_filler_primer.jpg)
