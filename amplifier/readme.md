@@ -20,9 +20,9 @@
   - THD+N < 0.01% in the range of 0.3W - 200W at 4Ω, 111dBA dynamic range
   - [3eaudio Product Page](https://www.3e-audio.com/amplifier-kits/tpa3255-2ch-260w/)
   - [Product Datasheet](../amplifier/DS_EAUMT-0260-2-A_Rev1.0.pdf)
-  - [tpa3255 Datasheet](../amplifier/tpa3255.pdf)
+  - [tpa3255 Datasheet](../amplifier/tpa3255B.pdf)
   - DC Voltage supplied - 46V (compromise between Power, THD+N, Heat, speakers resistance)
-  - output power rating - 150W (page 11, Figure 8, [tpa3255 Datasheet](../amplifier/tpa3255.pdf)) .
+  - output power rating - 150W (page 11, Figure 8, [tpa3255 Datasheet](../amplifier/tpa3255B.pdf)) .
   - ![Class D Amplifier photo](../amplifier/amplifier_top.jpg)
   - ![Class D Amplifier photo](../amplifier/amplifier_bottom.jpg)
 
