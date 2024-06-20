@@ -49,7 +49,7 @@
 #### Speakers - [full description](speakers/readme.md) - based on Open Source [Bromo Project](https://sbacoustics.com/product/bromo/)
 ![Speaker Cross-over Schematic](speakers/cross_over.png)
    
-#### Firmware - [full description](main/readme.md)
+#### Firmware - [full description and code](main/readme.md)
 ![Firmaware Main loop Schematic](main/firmware_app_main_scheme.png)
 
 
