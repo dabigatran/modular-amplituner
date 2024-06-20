@@ -73,7 +73,7 @@
   - [Datasheet](../receiver/dir9001.pdf)
   - ![Photo](../receiver/dir9001_top.jpg)
 - **I2S Signal Switch Module**
-  - Based on HC273 chip (ONSemiTI)
+  - Based on HC273 chip (Texas Instruments)
   - [Datasheet](../receiver/cd54hc573.pdf)
   - ![Photo](../receiver/i2s_switch_module.jpg)
   - ![Photo](../receiver/i2s_switch.jpg)
