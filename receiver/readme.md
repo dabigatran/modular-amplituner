@@ -73,8 +73,8 @@
   - [Datasheet](../receiver/dir9001.pdf)
   - ![Photo](../receiver/dir9001_top.jpg)
 - **I2S Signal Switch Module**
-  - Based on HC245 chip (ONSemi)
-  - [Datasheet](../receiver/HC245_2304223.pdf)
+  - Based on HC273 chip (ONSemiTI)
+  - [Datasheet](../receiver/cd54hc573.pdf)
   - ![Photo](../receiver/i2s_switch_module.jpg)
   - ![Photo](../receiver/i2s_switch.jpg)
 
