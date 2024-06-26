@@ -6,6 +6,13 @@
 
 ![Receiver Power Supply Schematic](../receiver/receiver_power_supply_schematics.png)
 
+# Assembled Receiver
+
+![Assembled Receiver Top](../receiver/assembled_reveiver_top.jpg)
+
+![Assemebled Receiver Front](../receiver/assembled_reveiver_front.jpg)
+
+![Assemebled Receiver Back](../receiver/assembled_reveiver_back.jpg)
 
 # Receiver Components
 

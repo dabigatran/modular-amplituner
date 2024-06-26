@@ -3,6 +3,8 @@
 ![Amplifier Schematic](../amplifier/amplifier_connection_schematics.png)
 ![Assembled amplifier photo](../amplifier/assembled_amplifier_top.jpg)
 ![Assembled amplifier photo](../amplifier/assembled_amplifier_front.jpg)
+![Assembled amplifier photo](../amplifier/assembled_amplifier_left_front.jpg)
+![Assembled amplifier photo](../amplifier/assembled_amplifier_top_back.jpg)
 ![Assembled amplifier photo](../amplifier/assembled_amplifier_back.jpg)
 
 # Amplifier Components
