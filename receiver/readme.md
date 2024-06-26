@@ -8,11 +8,11 @@
 
 # Assembled Receiver
 
-![Assembled Receiver Top](../receiver/assembled_reveiver_top.jpg)
+![Assembled Receiver Top](../receiver/assembled_receiver_top.jpg)
 
-![Assemebled Receiver Front](../receiver/assembled_reveiver_front.jpg)
+![Assemebled Receiver Front](../receiver/assembled_receiver_front.jpg)
 
-![Assemebled Receiver Back](../receiver/assembled_reveiver_back.jpg)
+![Assemebled Receiver Back](../receiver/assembled_receiver_back.jpg)
 
 # Receiver Components
 
