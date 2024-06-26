@@ -20,3 +20,6 @@
 ![amplituner_13](../assembled_system/amplituner_v1_13.jpg)
 ![amplituner_14](../assembled_system/amplituner_v1_14.jpg)
 ![amplituner_15](../assembled_system/amplituner_v1_15.jpg)
+![amplituner_15](../assembled_system/amplituner_v1_16.jpg)
+![amplituner_15](../assembled_system/amplituner_v1_17.jpg)
+![amplituner_15](../assembled_system/amplituner_v1_18.jpg)
