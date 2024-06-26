@@ -1,4 +1,4 @@
-# Assembled and working system in temporary enclosure (receiver, amplifier, speakers)
+# Assembled and working system (receiver, amplifier, speakers)
 ## Presentations
 [Amplituner User Interface (download .mp4 to view)](https://raw.githubusercontent.com/dabigatran/modular-amplituner/main/assembled_system/amplituner_v1_main.mp4)
 
