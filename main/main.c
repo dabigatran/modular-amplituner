@@ -323,7 +323,7 @@ static void StandbyIsrHandlerAdd(void)
 static void DisplayWelcomeMessage(void)
 {
   LcdText(0, 2, "   Tuner");
-  LcdText(1, 1, "version 0.5");
+  LcdText(1, 1, "version 1.0");
 }
 
 static void DisplayInterface(void)
@@ -337,7 +337,9 @@ static void DisplayInterface(void)
 static void SetupAudioDefaults(void)
 {
   tunerState[VOLUME][ACT_VAL] = VOL_DEFAULT;
+  tunerState[VOLUME][LAS_VAL] = VOL_DEFAULT;
   tunerState[SOURCE][ACT_VAL] = SRC_DEFAULT;
+  tunerState[SOURCE][LAS_VAL] = SRC_DEFAULT;
   tunerState[BALANCE][ACT_VAL] = BAL_DEFAULT;
   tunerState[TREBLE][ACT_VAL] = TRE_DEFAULT;
   tunerState[BASS][ACT_VAL] = BAS_DEFAULT;

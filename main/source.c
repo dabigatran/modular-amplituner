@@ -211,15 +211,15 @@ int8_t ToggleI2S(int8_t source)
 void SwitchHdmi()
 {
     McpSetPin(MCP1_ADDRESS, GPIOB, HDMI_SWITCH);
-    vTaskDelay(100 / (portTICK_PERIOD_MS));
+    vTaskDelay(200 / (portTICK_PERIOD_MS));
     McpClearPin(MCP1_ADDRESS, GPIOB, HDMI_SWITCH);
-    vTaskDelay(500 / (portTICK_PERIOD_MS));
+    vTaskDelay(550 / (portTICK_PERIOD_MS));
 }
 
 void SwitchI2s()
 {
     McpSetPin(MCP1_ADDRESS, GPIOB, I2S_SWITCH);
-    vTaskDelay(110 / portTICK_PERIOD_MS);
+    vTaskDelay(120 / portTICK_PERIOD_MS);
     McpClearPin(MCP1_ADDRESS, GPIOB, I2S_SWITCH);
-    vTaskDelay(10 / (portTICK_PERIOD_MS));
+    vTaskDelay(30 / (portTICK_PERIOD_MS));
 }
