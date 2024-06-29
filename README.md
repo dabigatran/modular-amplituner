@@ -1,6 +1,6 @@
 # Modular Amplituner
 
-![Project Logo](assembled_system/amplituner_v1_02.jpg)
+![Project Logo](assembled_system/amplituner_v1_03.jpg)
 
 ## Overview
 
