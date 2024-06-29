@@ -40,7 +40,7 @@
 
 ### Microcontroller & Extenders
 - **Microcontroller Module**
-  - SoC ESP32 WROOM DEV KIT (Espressif Systems)
+  - ESP32 WROOM-32 DEV KIT – Dual Core Tensilica LX6 240 MHz (Espressif Systems)
   - [Datasheet](../receiver/ESP-WROOM-32_datasheet.pdf)
   - ![Photo](../receiver/ESP32_WROOM_dev_kit.jpg)
 - **I2C Bus Extender Module**
