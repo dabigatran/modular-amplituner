@@ -14,22 +14,22 @@
 ## Features
 
 ### Speaker System
-- **Sound Intensity:** Up to 100dB (SPL)
-- **Sensitivity:** At least 84dB
-- **Frequency Range:** 50-20000Hz
+- **Sound Intensity:** 105dB (Max SPL)
+- **Sensitivity:** 84dB
+- **Frequency Range:** 45 – 24000 Hz
 - **Impedance Range:** 4-8 Ohms
 
 ### Audio Amplifier
-- **Power Rating:** Minimum 150 watts
+- **Power Rating:** Up to 150W
 - **Type:** Class D stereo amplifier
 - **Inputs:** 2x RCA audio inputs
 - **Outputs:** 2x speaker outputs
 
 ### Audio Receiver
-- **Digital Audio Sources:** At least one wired, one wireless
-- **Analog Audio Sources:** At least one
-- **Audio-Video Sources:** Four digital inputs
-- **Outputs:** One digital audio-video, one analog audio
+- **Digital Audio Sources:** Spdif, Bluetooth, USBC
+- **Analog Audio Sources:** 2x RCA
+- **Audio-Video Sources:** 4x HDMI
+- **Outputs:** HDMI, 2x RCA
 - **Control:** Volume, sound source, bass, treble, balance
 - **Display:** LCD for current status and volume
 - **Remote Control:** Infrared with Chromecast integration
@@ -40,55 +40,17 @@
 
 ### Schematics
 
-#### Receiver - [full description](receiver/readme.md)
+#### Receiver - [technical specification](receiver/readme.md)
 ![Receiver Audio Path Schematic](receiver/receiver_audio_path.png)
 
-#### Amplifier - [full description](amplifier/readme.md)
+#### Amplifier - [technical specification](amplifier/readme.md)
 ![Amplifier Schematic](amplifier/amplifier_connection_schematics.png)
 
-#### Speakers - [full description](speakers/readme.md) - based on Open Source [Bromo Project](https://sbacoustics.com/product/bromo/)
+#### Speakers - [technical specification](speakers/readme.md) - based on Open Source [Bromo Project](https://sbacoustics.com/product/bromo/)
 ![Speaker Cross-over Schematic](speakers/cross_over.png)
    
-#### Firmware - [full description and code](main/readme.md)
+#### Firmware - [description and code](main/readme.md)
 ![Firmaware Main loop Schematic](main/firmware_app_main_scheme.png)
-
-
-## Technical Specifications
-
-### Functional Requirements
-1. **Speaker System:**
-   - Sound intensity: Up to 100dB (SPL)
-   - Sensitivity: At least 84dB
-   - Frequency range: 50-20000Hz
-   - Impedance: 4-8 Ohms
-
-2. **Audio Amplifier:**
-   - Minimum power rating: 150 watts
-
-3. **Audio Receiver:**
-   - Support for various audio sources
-   - Volume and functionality control
-   - Display of current status
-   - Control via knobs and remote
-
-### Non-Functional Requirements
-1. **Speaker Set:**
-   - Two speaker columns (monitors, bass-reflex type)
-   - Rated power: Up to 150W
-   - Frequency range: 45-24000Hz
-
-2. **Audio Amplifier:**
-   - Stereo, class D
-   - Rated power: Up to 150W/channel at THD+N < 0.01%
-   - Switching power supply with EMI filter
-
-3. **Receiver (Tuner):**
-   - HDMI and Spdif inputs
-   - Bluetooth 5.0 module
-   - USB-C audio input
-   - RCA analog audio inputs and outputs
-   - Control unit: microcontroller (SoC)
-   - DAC, LCD display, control encoders
 
 ## Installation
 
